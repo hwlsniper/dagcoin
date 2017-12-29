@@ -488,6 +488,55 @@
             },
           },
         })
+        .state('transactions', {
+          url: '/transactions',
+          params: {
+            backTo: 'walletHome',
+            address: null
+          },
+          needProfile: true,
+          views: {
+            main: {
+              templateUrl: 'controllers/transactions/transactions.template.html'
+            },
+          }
+        })
+        .state('contacts', {
+          url: '/contacts',
+          params: {
+            backTo: 'walletHome'
+          },
+          needProfile: true,
+          views: {
+            main: {
+              templateUrl: 'controllers/contacts/contacts.template.html'
+            },
+          }
+        })
+        .state('contact', {
+          url: '/contacts/:address',
+          params: {
+            backTo: 'contacts'
+          },
+          needProfile: true,
+          views: {
+            main: {
+              templateUrl: 'controllers/contacts/contact/contact.template.html'
+            },
+          }
+        })
+        .state('new_contact', {
+          url: '/contacts/contact/new',
+          params: {
+            backTo: 'contacts'
+          },
+          needProfile: true,
+          views: {
+            main: {
+              templateUrl: 'controllers/contacts/contact/new_contact/new_contact.template.html'
+            },
+          }
+        })
         .state('warning', {
           url: '/warning',
           controller: 'warningController',

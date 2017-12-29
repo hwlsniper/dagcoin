@@ -25,7 +25,7 @@
       root.get(name,
         (err, data) => {
           if (data) {
-            return callback('EEXISTS');
+            return callback('EXISTS');
           }
           return root.set(name, value, callback);
         });

@@ -112,21 +112,6 @@
       });
     },
   }))
-  .directive('contact', ['addressbookService', function (addressbookService) {
-    return {
-      restrict: 'E',
-      link(scope, element, attrs) {
-        const addr = attrs.address;
-        addressbookService.getLabel(addr, (label) => {
-          if (label) {
-            element.append(label);
-          } else {
-            element.append(addr);
-          }
-        });
-      },
-    };
-  }])
   .directive('highlightOnChange', () => ({
     restrict: 'A',
     link(scope, element, attrs) {

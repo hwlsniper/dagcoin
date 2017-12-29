@@ -3,6 +3,7 @@
               on-scan="index.onQrCodeScanned(data)"
               before-scan="index.onBeforeScan()">
   </qr-scanner>
+  <div ng-if="tab !== 'send' && index.isComplete" class="navbar-container-triggers navbar-container-triggers-right"><a ui-sref="contacts"><svg-icon name="perm_contact_calendar2"></svg-icon></a></div>
 </dag-nav-bar>
 
 
@@ -64,6 +65,8 @@
 
             <div ng-show="!index.updateError && index.walletScanStatus != 'error'"
                  ng-click='index.updateAll(); index.updateHistoryFromNetwork()'>
+
+
 
               <div class="price-wrapper">
 
@@ -157,8 +160,7 @@
                 <table>
                   <tbody>
                   <tr ng-repeat="transaction in data.rows track by $index"
-                      class="transaction_status_{{transaction.action}}"
-                      ng-click="home.openTxModal(transaction, index.txHistory)">
+                      class="transaction_status_{{transaction.action}}">
                     <td class="transaction_status">
                       <svg-icon class="transaction_status_icon"
                                 ng-class="{'animation_rotate' : !transaction.confirmations}"
@@ -167,13 +169,14 @@
                     <td>
                       <div class="transaction_title">{{transactionStatus(transaction).title}}</div>
                       <div ng-if="transaction.action === 'received'">
-                        <div class="transaction_address"
-                             ng-repeat="address in transaction.arrPayerAddresses">{{address ? address :
-                          ('Incoming transaction' | translate)}}
+                        <div class="transaction_address" ng-repeat="address in transaction.arrPayerAddresses">
+                          <a ng-if="transactionAddress(address).address" ui-sref="transactions({address: transactionAddress(address).address})">{{transactionAddress(transaction.addressTo).fullName}}</a>
+                          <span ng-if="!transactionAddress(address).address">{{transactionAddress(address).fullName}}</span>
                         </div>
                       </div>
                       <div class="transaction_address" ng-if="transaction.action === 'sent'">
-                        {{transaction.addressTo}}
+                        <a ng-if="transactionAddress(transaction.addressTo).address" ui-sref="transactions({address: transactionAddress(transaction.addressTo).address})">{{transactionAddress(transaction.addressTo).fullName}}</a>
+                        <span ng-if="!transactionAddress(transaction.addressTo).address">{{transactionAddress(transaction.addressTo).fullName}}</span>
                       </div>
                     </td>
                     <td class="transaction_sum">
@@ -182,7 +185,7 @@
                       </div>
                       <div class="transition_date">{{transaction.time * 1000 | amDateFormat:'HH:mm:ss'}}</div>
                     </td>
-                    <td class="transaction_expand">
+                    <td class="transaction_expand" ng-click="home.openTxModal(transaction, index.txHistory)">
                       <svg-icon name="chevron-thin-right"></svg-icon>
                     </td>
                   </tr>
@@ -223,9 +226,7 @@
       <div class="introduction-svg" ng-include="'views/includes/background.html'"></div>
       <div class="p-wrap text-center m20t">
 
-        <h2 style="padding: 10px 20px;font-weight: 400;font-size: 14px;margin-top: 40px;">{{'Tap the' |
-          translate}} <strong>QR-code</strong> {{'to copy its address.' | translate}}<br/>{{'Share it with the
-          sender via email or text.' | translate}}</h2>
+        <h2 style="padding: 10px 20px;font-weight: 400;font-size: 14px;margin-top: 40px;">{{'Tap the' | translate}} <strong>QR-code</strong> {{'to copy its address.' | translate}}<br/>{{'Share it with the sender via email or text.' | translate}}</h2>
 
         <!-- Address-->
         <div class="text-center">

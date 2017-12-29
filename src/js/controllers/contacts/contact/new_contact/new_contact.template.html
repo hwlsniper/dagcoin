@@ -1,0 +1,16 @@
+<dag-nav-bar title="{{ 'New Contact' | translate }}" invert></dag-nav-bar>
+
+<div class="content" ng-controller="NewContactController as contact">
+  <form name="new_contact" ng-submit="contact.create()">
+    <label for="first_name">{{ 'First name' | translate}}</label>
+    <input id="first_name" type="text" ng-model="contact.first_name" name="first_name">
+
+    <label for="last_name">{{ 'Last name' | translate}}</label>
+    <input id="last_name" type="text" ng-model="contact.last_name" name="last_name">
+
+    <label for="address">{{ 'Address' | translate}}</label>
+    <input id="address" type="text" ng-model="contact.address" name="address">
+
+    <button class="btn btn_red" type="submit">{{ 'Save' | translate }}</button>
+  </form>
+</div>

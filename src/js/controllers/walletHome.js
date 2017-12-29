@@ -175,6 +175,23 @@
           return value;
         };
 
+        $scope.transactionAddress = (address) => {
+          if (!address) {
+            return { fullName: gettextCatalog.getString('Incoming transaction') };
+          }
+
+          let fullName = address;
+
+          addressbookService.getContact(address, (err, contact) => {
+            if (!err && contact) {
+              fullName = `${contact.first_name} ${contact.last_name || ''}`;
+            }
+          });
+
+          return { fullName, address };
+          // return { fullName };
+        };
+
         $scope.transactionStatus = (transaction) => {
           if (!transaction.confirmations) {
             return { icon: 'autorenew', title: gettextCatalog.getString('Pending') };

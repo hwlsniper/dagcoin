@@ -1,103 +1,124 @@
-(function () {
+(() => {
   'use strict';
 
-  /* eslint-disable no-unused-vars */
-  angular.module('copayApp.services').factory('addressbookService', (storageService, profileService, lodash) => {
-    const root = {};
+  angular
+    .module('copayApp.services')
+    .factory('addressbookService', addressbookService);
 
-    root.getLabel = function (addr, cb) {
-      const fc = profileService.focusedClient;
-      storageService.getAddressbook(fc.credentials.network, (storageServiceError, ab) => {
-        if (storageServiceError) {
-          return cb('Could not get the Addressbook');
-        }
-        if (!ab) {
-          return cb();
-        }
-        const addressBook = JSON.parse(ab);
-        if (addressBook[addr]) {
-          return cb(addressBook[addr]);
-        }
-        return cb();
-      });
+  addressbookService.$inject = ['storageService', 'profileService'];
+
+  function addressbookService(storageService, profileService) {
+    let contacts = false;
+
+    return {
+      getContact,
+      list,
+      add,
+      remove,
+      removeAll
     };
 
-    root.list = function (cb) {
+    function addressBookKey() {
       const fc = profileService.focusedClient;
-      storageService.getAddressbook(fc.credentials.network, (storageServiceError, ab) => {
-        if (storageServiceError) {
-          return cb('Could not get the Addressbook');
-        }
-        let addressBook;
-        if (ab) {
-          addressBook = JSON.parse(ab);
-        }
-        return cb(storageServiceError, addressBook);
-      });
-    };
+      const network = fc.credentials.network;
+      return `addressbook-${network}`;
+    }
 
-    root.add = function (entry, cb) {
-      const fc = profileService.focusedClient;
-      root.list((listError, ab) => {
+    /**
+     * Get contact by wallet address
+     * @param addr address of the wallet
+     * @param cb callback
+     * @returns {*}
+     */
+
+    function getContact(addr, cb) {
+      list(() => {
+        if (!contacts[addr]) {
+          return cb(false, false);
+        }
+
+        return cb(false, contacts[addr]);
+      });
+    }
+
+    function list(cb) {
+      if (!contacts) {
+        storageService.get(addressBookKey(), (err, ab) => {
+          if (err) {
+            return cb('Could not access storage.', {});
+          }
+          if (ab) {
+            const json = JSON.parse(ab);
+            contacts = {};
+
+            Object.keys(json).map((address) => {
+              if (typeof json[address] === 'string') {
+                contacts[address] = {
+                  address,
+                  first_name: json[address].split(' ')[0],
+                  last_name: json[address].split(' ')[1]
+                };
+              } else {
+                contacts[address] = json[address];
+              }
+              return true;
+            });
+          } else {
+            contacts = {};
+          }
+          list(cb);
+        });
+      } else {
+        return cb(false, contacts);
+      }
+    }
+
+    function add(entry, cb) {
+      list((listError, ab) => {
         if (listError) {
           return cb(listError);
         }
-        let addressBook = ab;
-        if (!addressBook) {
-          addressBook = {};
+        const addressBook = ab;
+
+        if (addressBook(entry.address)) {
+          return cb('Address already exists');
         }
 
-        const addressNames = lodash.values(addressBook);
-
-        if (addressNames.indexOf(entry.label) > -1) {
-          return cb('Entry with that label already exist');
-        }
-
-        if (addressBook[entry.address]) {
-          return cb('Entry with that address already exist');
-        }
-        addressBook[entry.address] = entry.label;
-        return storageService.setAddressbook(fc.credentials.network, JSON.stringify(addressBook), (setAddressbookError, address) => {
+        addressBook[entry.address] = entry;
+        return storageService.set(addressBookKey(), JSON.stringify(addressBook), (setAddressbookError) => {
           if (setAddressbookError) {
             return cb('Error adding new entry');
           }
-          return root.list((err, addressList) => cb(err, addressList));
+          return list((err, addressList) => cb(err, addressList));
         });
       });
-    };
+    }
 
-    root.remove = function (addr, cb) {
-      const fc = profileService.focusedClient;
+    function remove(addr, cb) {
       root.list((err, ab) => {
         if (err) {
           return cb(err);
-        }
-        if (!ab) {
-          return cb('Address book does not exist');
         }
         if (!ab[addr]) {
           return cb('Entry does not exist');
         }
         delete ab[addr];
-        return storageService.setAddressbook(fc.credentials.network, JSON.stringify(ab), (error) => {
+        return storageService.set(addressBookKey(), JSON.stringify(ab), (error) => {
           if (error) {
             return cb('Error deleting entry');
           }
           return root.list((listError, addressBook) => cb(listError, addressBook));
         });
       });
-    };
+    }
 
-    root.removeAll = function (cb) {
-      const fc = profileService.focusedClient;
-      storageService.removeAddressbook(fc.credentials.network, (err) => {
+    function removeAll(cb) {
+      storageService.remove(addressBookKey(), (err) => {
         if (err) {
           return cb('Error deleting addressbook');
         }
         return cb();
       });
-    };
-
-    return root;
-  });
-}());
+    }
+  }
+})();
