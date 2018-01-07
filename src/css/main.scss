@@ -40,6 +40,22 @@ h4{
   text-transform: uppercase;
   color: #2c3e50;
   font-weight: 700;
+
+  &.title {
+    background: #f1f3f5;
+    padding: 0.8rem;
+    text-transform: uppercase;
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 0.7rem;
+
+    a {
+      text-transform: none;
+      font-weight: 400;
+      padding: 7px;
+      font-size: 12px;
+    }
+  }
 }
 
 svg-icon {
@@ -95,6 +111,7 @@ svg {
 
 ul {
   margin: 0;
+  list-style-type: none;
 
   &.pagination {
     li {
@@ -113,10 +130,6 @@ ul {
     box-shadow: inset 0 1px 1px 0 rgba(10, 19, 28, 0.12);
     border-radius: 0 0 3px 3px;
   }
-}
-
-ul{
-  list-style-type: none;
 }
 
 img {
@@ -141,24 +154,6 @@ h3 {
 
 h2 span.small {
   font-size: 0.875rem;
-}
-
-h4 {
-  &.title {
-    background: #f1f3f5;
-    padding: 0.8rem;
-    text-transform: uppercase;
-    color: #2c3e50;
-    font-weight: 700;
-    font-size: 0.7rem;
-
-    a {
-      text-transform: none;
-      font-weight: 400;
-      padding: 7px;
-      font-size: 12px;
-    }
-  }
 }
 
 ul.whopays li {
@@ -3084,9 +3079,9 @@ p.color_red {
     width: 100%;
     left: 0;
     bottom: 0;
-    -webkit-animation: slideInUp 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    animation: slideInUp 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    box-shadow: 0 0 10px 5px rgba(50,50,50,.1);
+    -webkit-animation: slideInUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    animation: slideInUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    box-shadow: 0 0 10px 5px rgba(50,50,50,0.1);
 
     >ul{
       padding: 15px;
@@ -3128,8 +3123,8 @@ p.color_red {
 
   &.ngdialog-closing{
     .ngdialog-content{
-      -webkit-animation: slideOutDown 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-      animation: slideOutDown 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      -webkit-animation: slideOutDown 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      animation: slideOutDown 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     }
   }
 }

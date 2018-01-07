@@ -1,0 +1,166 @@
+@import "../../../css/variables";
+
+.dag_transactions {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 15px 0;
+  position: relative;
+
+  .transaction_history_status, .transaction_history_status p {
+    color: #555;
+    font-size: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .transactions_date {
+    color: #c3c7c9;
+    font-size: 12px;
+    text-transform: uppercase;
+    background: #fbfbfb;
+    padding: 3px 45px 3px 20px;
+    border-bottom: 1px solid #f1f1f1;
+    border-top: 1px solid #f1f1f1;
+    margin-top: 20px;
+  }
+
+  dag-spinner{
+    .loader{
+      border-left-color: $main_color;
+      font-size: 3px;
+    }
+  }
+
+  .dag_transactions_list_triggers{
+    margin-bottom: 10px;
+    padding: 0 20px;
+  }
+
+  .dag_transactions_table{
+    padding: 0 20px;
+    margin-top: 5px;
+  }
+
+  .transactions_export_button {
+    width: auto;
+    padding: 2px 5px;
+    margin: 0;
+    font-size: 12px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    min-width: 120px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+      top: -1px;
+      margin: 0 5px;
+      position: relative;
+    }
+
+    dag-spinner {
+      height: 20px;
+    }
+
+    .loader {
+      font-size: 1.5px;
+      margin: -8px 0 0 -8px;
+      border-left: 1.1em solid $main_color;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+    }
+
+    &[disabled]{
+      background: transparent !important;
+    }
+  }
+
+  table {
+    margin-bottom: 0;
+    tr {
+
+      &.transaction_status_pending {
+        color: #4c4f54;
+      }
+
+      &.transaction_status_blocked {
+        .transaction_status_icon, .transaction_sum {
+          color: $red;
+        }
+      }
+
+      &.transaction_status_received {
+        .transaction_status_icon, .transaction_sum {
+          color: $green
+        }
+      }
+
+      &.transaction_status_sent {
+        .transaction_status_icon, .transaction_sum {
+          color: $warning;
+        }
+      }
+
+      td {
+        padding: 5px 0;
+        color: currentColor;
+        border-bottom: none;
+        cursor: pointer;
+
+        &.transaction_status {
+          width: 50px;
+        }
+
+        &.transaction_sum {
+          text-align: right;
+          width: 70px;
+        }
+
+        &.transaction_expand{
+          width: 26px;
+          text-align: right;
+
+          svg{
+            width: 12px;
+            height: 12px;
+            color: #999;
+          }
+        }
+      }
+
+      .transaction_title {
+        color: #4c4f54;
+        font-size: 15px;
+        text-transform: capitalize;
+      }
+
+      .transaction_address {
+        color: #b9b9b9;
+        font-size: 11px;
+      }
+
+      .transition_date {
+        font-size: 11px;
+        color: #b9b9b9;
+      }
+
+      .transaction_status_icon {
+        padding: 5px;
+        border: 1px solid #eee;
+        border-radius: 100%;
+        background: #fff;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .transaction_sum {
+        font-size: 15px;
+      }
+
+    }
+  }
+}

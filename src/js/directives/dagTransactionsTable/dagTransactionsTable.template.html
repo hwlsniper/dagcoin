@@ -1,0 +1,72 @@
+<div class="dag_transactions">
+    <dag-tabset>
+        <dag-tab heading="Transactions">
+            <div class="transaction_history_status" ng-show="rows.length <= 0">
+                <p translate>No transactions yet</p>
+            </div>
+            <div class="dag_transactions_list" ng-show="rows.length > 0">
+
+                <div class="dag_transactions_list_triggers">
+                    <h4 translate>Transactions History</h4>
+
+                    <!-- EXPORT TO CVS: START -->
+                    <div ng-if="!isCordova">
+                        <input id="export_file" type="file"
+                               nwsaveas="Dagcoin.csv" accept=".csv"
+                               style="display:none">
+                        <button ng-disabled="exporting" class="transactions_export_button btn btn_red"
+                                ng-click="exportToCsv()">
+                            <div ng-if="!exporting">
+                                <svg-icon name="content_copy"></svg-icon>
+                                <span translate>Export To CSV</span>
+                            </div>
+                            <dag-spinner ng-if="exporting"></dag-spinner>
+                        </button>
+                    </div>
+                    <!-- EXPORT TO CVS: END -->
+                </div>
+
+                <div ng-repeat="(date, rows) in transactions">
+                    <h4 class="transactions_date">{{formatDate(date)}}</h4>
+                    <table>
+                        <tbody>
+                        <tr ng-repeat="transaction in rows track by $index"
+                            class="transaction_status_{{transaction.action}}" ng-click="openTransaction(transaction)">
+                            <td class="transaction_status">
+                                <svg-icon class="transaction_status_icon"
+                                          name="{{transactionStatus(transaction).icon}}"></svg-icon>
+                            </td>
+                            <td>
+                                <div class="transaction_title">{{transactionStatus(transaction).title}}</div>
+                                <div ng-if="transaction.action === 'received'">
+                                    <div class="transaction_address"
+                                         ng-repeat="address in transaction.arrPayerAddresses">{{address ? address :
+                                        ('Incoming transaction' | translate)}}
+                                    </div>
+                                </div>
+                                <div class="transaction_address" ng-if="transaction.action === 'sent'">
+                                    {{transaction.addressTo}}
+                                </div>
+                            </td>
+                            <td class="transaction_sum">
+                                <div class="transaction_sum">{{transaction.action === 'received' ? '+' : '-'}}
+                                    {{formatSum(transaction.amountStr)}}
+                                </div>
+                                <div class="transition_date">{{transaction.time * 1000 | amDateFormat:'HH:mm:ss'}}</div>
+                            </td>
+                            <td class="transaction_expand">
+                                <svg-icon name="chevron-thin-right"></svg-icon>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <button ng-show="limit < rows.length" class="btn btn_red" ng-click="increaseLimit();">
+                        <span translate>Show More</span>
+                    </button>
+                </div>
+            </div>
+        </dag-tab>
+    </dag-tabset>
+</div>
