@@ -70,7 +70,7 @@
           if (err) {
             $scope.encrypt = true;
 
-            if (err.message !== gettext('Password needed')) {
+            if (err.message !== gettextCatalog.getString('Password needed')) {
               return unlock(err.message);
             }
             return;

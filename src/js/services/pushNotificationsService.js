@@ -33,14 +33,11 @@
       wsLocal = ws;
       if (data && data.projectNumber !== undefined) {
         storageService.getPushInfo((err, pushInfo) => {
-          const config = configService.getSync();
           projectNumber = `${data.projectNumber}`;
           if (pushInfo && projectNumber === '0') {
             root.pushNotificationsUnregister(() => {
 
             });
-          } else if (projectNumber && config.pushNotifications.enabled) {
-            root.pushNotificationsInit();
           }
         });
       }

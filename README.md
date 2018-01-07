@@ -24,12 +24,11 @@ If you are building for testnet, switch to testnet branch:
 git checkout testnet
 ```
 
-Install [bower](http://bower.io/), [grunt](http://gruntjs.com/getting-started) and [penv](https://www.npmjs.com/package/penv) if you haven't already:
+Install [bower](http://bower.io/) and [grunt](http://gruntjs.com/getting-started)  if you haven't already:
 
 ```sh
 npm install -g bower
 npm install -g grunt-cli
-npm install -g penv
 ```
 
 ### Build Dagcoin:
@@ -44,7 +43,6 @@ Then run Dagcoin desktop client:
 ```
 Otherwise run:
 ```sh
-penv testnet(if you are building testnet) or penv base(if you are building livenet)
 bower install
 npm install
 grunt

@@ -5,9 +5,7 @@ CloseColor='\033[0m'
 
 NodeVersion="v5.12.0"
 environment=$1
-if [ "$environment" == "base" ]; then
-  environment="live"
-fi
+
 echo "${Green}* Node version OK${CloseColor}"
 if ! type bower > /dev/null; then
   echo "${Red}* ERROR. Please install bower${CloseColor}"
@@ -19,15 +17,10 @@ if ! type grunt > /dev/null; then
   echo "${Red}* npm install -g grunt-cli${CloseColor}"
   exit
 fi
-if ! type penv > /dev/null; then
-  echo "${Red}* ERROR. Please install penv${CloseColor}"
-  echo "${Red}* npm install -g penv${CloseColor}"
-  exit
-fi
+
 echo "${Green}* Installing bower dependencies...${CloseColor}"
 bower install
-echo "${Green}* Preparing ${1} dependencies...${CloseColor}"
-penv $1
+
 echo "${Green}* Installing npm dependencies...${CloseColor}"
 npm install
 

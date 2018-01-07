@@ -1,31 +1,31 @@
 VERSION=`cut -d '"' -f2 $BUILDDIR/../version.js`
+GREEN=\033[0;32m
+CLOSECOLOR=\033[0m
 
 UNAME := $(shell uname)
 
 ifeq ($(UNAME), Linux)
-  # do something Linux-y
   SHELLCMD := bash
 endif
 
 ifeq ($(UNAME), Darwin)
-  # do something MAC
   SHELLCMD := sh
 endif
 
 prepare-dev:
-	$(SHELLCMD) devbuilds/prepare-dev.sh base
+	$(SHELLCMD) devbuilds/prepare-dev.sh live
 
 prepare-dev-tn:
 	$(SHELLCMD) devbuilds/prepare-dev.sh testnet
+	@echo "$(GREEN)Generating testnet configuration...$(CLOSECOLOR)"
+	$(SHELLCMD) devbuilds/testnetify.sh
+	@echo "$(GREEN)Done. You can start wallet now. $(CLOSECOLOR)"
 
 prepare-package:
 	$(SHELLCMD) devbuilds/prepare-package.sh live
 
 prepare-package-tn:
 	$(SHELLCMD) devbuilds/prepare-package.sh testnet
-
-cordova-base:
-	grunt dist-mobile
 
 ios-prod:
 	cordova/build.sh IOS --clear
@@ -50,14 +50,6 @@ android-prod-tn:
 	jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore dagcoin.jks -tsa http://sha256timestamp.ws.symantec.com/sha256/timestamp -signedjar ../byteballbuilds/project-ANDROID/platforms/android/build/outputs/apk/android-release-signed.apk  ../byteballbuilds/project-ANDROID/platforms/android/build/outputs/apk/android-release-unsigned.apk dagcoin
 	$(ANDROID_HOME)/build-tools/25.0.3/zipalign -v 4 ../byteballbuilds/project-ANDROID/platforms/android/build/outputs/apk/android-release-signed.apk ../byteballbuilds/project-ANDROID/platforms/android/build/outputs/apk/android-release-signed-aligned.apk
 
-android-debug:
-	cordova/build.sh ANDROID dagcoin --dbgjs --clear live
-	cd ../byteballbuilds/project-ANDROID  && cordova run android --device
-
-android-debug-tn:
-	cordova/build.sh ANDROID dagcoin --dbgjs --clear testnet
-	cd ../byteballbuilds/project-ANDROID  && cordova run android --device
-
 android-debug-fast:
 	cordova/build.sh ANDROID dagcoin --dbgjs live
 #	cp ./etc/beep.ogg ./cordova/project/plugins/phonegap-plugin-barcodescanner/src/android/LibraryProject/res/raw/beep.ogg
@@ -68,10 +60,6 @@ android-debug-fast-tn:
 	cordova/build.sh ANDROID dagcoin --dbgjs testnet
 	cd ../byteballbuilds/project-ANDROID && cordova run android --device
 #	cd ../byteballbuilds/project-ANDROID && cordova build android
-
-android-debug-fast-emulator:
-	cordova/build.sh ANDROID dagcoin --dbgjs live
-	cd ../byteballbuilds/project-ANDROID && cordova emulate android
 
 android-debug-fast-emulator-tn:
 	cordova/build.sh ANDROID dagcoin --dbgjs testnet

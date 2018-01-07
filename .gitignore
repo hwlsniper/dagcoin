@@ -107,12 +107,8 @@ public/migrations
 webkitbuilds/setup-win32.iss
 webkitbuilds/setup-win64.iss
 
-#generated package.json
-package.json
-
 #generated environment variables
 src/js/config.js
-environments/dev.json
 
 #generated database.json
 database.json

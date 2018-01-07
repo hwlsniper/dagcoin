@@ -134,7 +134,14 @@
         require('byteballcore/uri.js').parseUri(uri, {
           ifError(err) {
             console.log(err);
-            notification.error(err);
+            const conf = require('byteballcore/conf.js');
+            const noPrefixRegex = new RegExp(`.*no.*${conf.program}.*prefix.*`, 'i');
+            if (noPrefixRegex.test(err.toString())) {
+              notification.error(gettextCatalog.getString('Incorrect Dagcoin Address'));
+            } else {
+              notification.error(err);
+            }
+
             // notification.success(gettextCatalog.getString('Success'), err);
           },
           ifOk(objRequest) {
