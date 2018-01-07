@@ -1,3 +1,122 @@
-.transactions{
-  color: inherit;
+@import "../../../css/variables";
+
+.contacts {
+
+  .dag_tabs .dag_tabs_list > ul {
+    @include gradientBackground($main_color, darken($main_color, 5), top, bottom);
+    border-bottom-color: #a8191e;
+  }
+
+  .dag_tabs .dag_tabs_list > .dag_tabs_slider {
+    background: #fff;
+  }
+
+  .dag_tabs .dag_tabs_list .dag_tabs_list_link a {
+    color: #fff;
+  }
+
+  .dag_tabs .dag_tabs_tabpanel {
+    padding: 0;
+  }
+
+  .contacts_search_bar {
+    margin: 10px 15px;
+    position: relative;
+
+    svg-icon {
+      color: #b3bbc4;
+
+      svg {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        margin-top: -8px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .contacts_search_bar_input {
+      border: none;
+      padding: 10px 10px 10px 30px;
+      width: 100%;
+      background: #f1f1f1;
+      max-width: 100%;
+      font-size: 13px;
+      color: #666;
+      font-weight: 400;
+    }
+  }
+
+  .contacts_list {
+    padding: 0 10px;
+    table {
+      margin: 0;
+      width: 100%;
+
+      td {
+        border-bottom: 1px solid #eee;
+        border-top: 1px solid #eee;
+        text-align: left;
+        line-height: inherit;
+        padding: 15px 20px;
+
+        &.contacts_list_contact_favorite {
+          vertical-align: middle;
+          text-align: center;
+          width: 60px;
+          border-right: 1px solid #eee;
+          padding: 0;
+
+          .contacts_list_contact_favorite_trigger {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+
+            svg-icon {
+              @extend .transition;
+              position: absolute;
+              left: 0;
+              top: 0;
+              height: 100%;
+              width: 100%;
+              color: $gold;
+
+              &.svg-icon-star {
+                transform: scale(0.3);
+                opacity: 0;
+              }
+
+              &.svg-icon-star_border {
+                transform: scale(1);
+                opacity: 1;
+              }
+            }
+
+            &.selected {
+              svg-icon {
+                &.svg-icon-star {
+                  transform: scale(1);
+                  opacity: 1;
+                }
+
+                &.svg-icon-star_border {
+                  transform: scale(1.5);
+                  opacity: 0;
+                }
+              }
+            }
+          }
+        }
+
+        &.contacts_list_contact_info {
+          .contacts_list_contact_info_full_name {
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
 }

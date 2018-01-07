@@ -104,15 +104,24 @@
               // just to be sure we have an address
               self.setAddress();
               break;
-            case 'history':
-              $rootScope.$emit('Local/NeedFreshHistory');
+            case 'walletHome':
+              $scope.sendForm.$setPristine();
+              self.resetForm();
               break;
             case 'send':
+              $scope.sendForm.$setPristine();
+              self.resetForm(() => {
+                if ($rootScope.sendParams) {
+                  if ($rootScope.sendParams.amount) {
+                    $scope._amount = $rootScope.sendParams.amount;
+                  }
+                  if ($rootScope.sendParams.address) {
+                    $scope._address = $rootScope.sendParams.address;
+                  }
+                  delete $rootScope.sendParams;
+                }
+              });
 
-              $scope.sendForm.$setPristine(); // Reset form on tabs' change.
-
-              self.resetForm();
-              self.resetError();
               break;
             default:
             // do nothing
@@ -173,6 +182,16 @@
             return 'Yesterday';
           }
           return value;
+        };
+
+        addressbookService.favorites((err, favorites) => {
+          $scope.favorite_contacts = favorites;
+        });
+
+        $scope.transferToFavorite = (contact) => {
+          $rootScope.sendParams = $rootScope.sendParams || {};
+          $rootScope.sendParams.address = contact.address;
+          $rootScope.$emit('Local/SetTab', 'send');
         };
 
         $scope.transactionAddress = (address) => {
@@ -1279,7 +1298,7 @@
           }
         };
 
-        this.resetForm = function () {
+        this.resetForm = function (cb) {
           this.resetError();
           delete this.binding;
 
@@ -1319,6 +1338,9 @@
             }
           }
           $timeout(() => {
+            if (cb) {
+              cb();
+            }
             $rootScope.$digest();
           }, 1);
         };

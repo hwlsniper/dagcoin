@@ -1,4 +1,4 @@
-<dag-nav-bar title="{{ 'Contacts' | translate }}" invert>
+<dag-nav-bar title="{{ 'Address Book' | translate }}">
   <div class="navbar-container-triggers navbar-container-triggers-right">
     <a ui-sref="new_contact">
       <svg-icon name="add"></svg-icon>
@@ -6,17 +6,43 @@
   </div>
 </dag-nav-bar>
 
-<div class="content contacts" ng-controller="ContactsController as contacts">
-  <div class="contacts_search_bar">
-    <input class="contacts_search_bar_input" type="text" name="search" ng-model="search" placeholder="{{ 'Search' | translate}}">
-  </div>
+<div class="content contacts">
+  <dag-tabset>
+    <dag-tab heading="{{ 'contacts' | translate }}">
+      <div class="contacts_search_bar">
+        <svg-icon name="search2"></svg-icon>
+        <input class="contacts_search_bar_input" type="text" name="search" ng-model="search"
+               placeholder="{{ 'Search' | translate}}">
+      </div>
 
-  <div class="contacts_list">
-    <ul>
-      <li ng-repeat="(address, contact) in contacts.list" >
-        <svg-icon ng-click="contacts.toggleFavorite(contact)" name="{{contact.favorite ? 'star' : 'star_border'}}"></svg-icon>
-        <div ui-sref="contact({address: address})">{{contact.first_name}}</div>
-      </li>
-    </ul>
-  </div>
+      <div class="contacts_list">
+        <table>
+          <tbody>
+          <tr ng-repeat="(address, contact) in contacts.list">
+            <td class="contacts_list_contact_favorite" ng-click="contacts.toggleFavorite(contact)">
+              <div class="contacts_list_contact_favorite_trigger" ng-class="{'selected' : contact.favorite}">
+                <svg-icon name="star"></svg-icon>
+                <svg-icon name="star_border"></svg-icon>
+              </div>
+            </td>
+            <td class="contacts_list_contact_info">
+              <a class="contacts_list_contact_info_full_name" ui-sref="contact({address: address})">{{contact.first_name}}</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </dag-tab>
+    <dag-tab heading="{{ 'favorites' | translate }}">
+
+      <div class="contacts_search_bar">
+        <svg-icon name="search2"></svg-icon>
+        <input class="contacts_search_bar_input" type="text" name="search" ng-model="search"
+               placeholder="{{ 'Search' | translate}}">
+      </div>
+
+      Favorites
+    </dag-tab>
+  </dag-tabset>
+
 </div>

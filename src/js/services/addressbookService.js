@@ -13,7 +13,9 @@
     return {
       getContact,
       list,
+      favorites,
       add,
+      update,
       remove,
       removeAll
     };
@@ -73,6 +75,26 @@
       }
     }
 
+    function favorites(cb) {
+      list((listError, ab) => {
+        if (!listError) {
+          const favoritesList = [];
+
+          Object.keys(ab).map((address) => {
+            const contact = ab[address];
+            if (contact.favorite) {
+              favoritesList.push(contact);
+            }
+            return true;
+          });
+
+          return cb(false, favoritesList);
+        }
+
+        return cb(listError, {});
+      });
+    }
+
     function add(entry, cb) {
       list((listError, ab) => {
         if (listError) {
@@ -90,6 +112,23 @@
             return cb('Error adding new entry');
           }
           return list((err, addressList) => cb(err, addressList));
+        });
+      });
+    }
+
+    function update(entry, cb) {
+      list((listError, ab) => {
+        if (listError) {
+          return cb(listError);
+        }
+        const addressBook = ab;
+
+        addressBook[entry.address] = entry;
+        return storageService.set(addressBookKey(), JSON.stringify(addressBook), (setAddressbookError) => {
+          if (setAddressbookError) {
+            return cb(`Error updating entry: ${entry.address}`);
+          }
+          return cb(false);
         });
       });
     }

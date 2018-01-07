@@ -242,7 +242,6 @@ module.exports = function (grunt) {
           'bower_components/angular-ui-switch/angular-ui-switch.css',
           'bower_components/angular-carousel/dist/angular-carousel.css',
           'bower_components/ng-dialog/css/ngDialog.min.css',
-          'bower_components/ng-dialog/css/ngDialog-theme-default.min.css',
           'bower_components/swiper/dist/css/swiper.min.css'
         ],
         dest: 'public/css/vendors.css'

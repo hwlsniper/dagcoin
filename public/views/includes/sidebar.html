@@ -1,53 +1,62 @@
 <nav class="sidebar left-off-canvas-menu" ng-controller="sidebarController as sidebar">
-    <header>
-        <div>
-            <svg class="icon icon-logo">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="img/svg/symbol-defs.svg#icon-logo"></use>
-            </svg>
+  <header>
+    <div>
+      <svg class="icon icon-logo">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="img/svg/symbol-defs.svg#icon-logo"></use>
+      </svg>
+    </div>
+    <div ng-include="'views/includes/versionAndWalletType.html'"></div>
+  </header>
+
+  <ul class="off-canvas-list">
+    <li ng-show="sidebar.wallets[0]"
+        ng-repeat="item in sidebar.wallets track by $index"
+        ng-class="{'selected': item.id == index.walletId}"
+        class="wallets">
+      <a
+        ng-click="index.setTab('walletHome', false, 0, true); sidebar.switchWallet(item.id, index.walletId,'walletHome');">
+        <div class="avatar-wallet" ng-style="{'background-color':item.color}">
+          {{(item.name || item.id) | limitTo: 1}}
         </div>
-        <div ng-include="'views/includes/versionAndWalletType.html'"></div>
-    </header>
+        <div class="name-wallet text-ellipsis" r>{{item.name || item.id}}</div>
+        <div class="size-12" ng-show="item.n > 1" translate>{{item.m}}-of-{{item.n}}</div>
+      </a>
 
-    <ul class="off-canvas-list">
-        <li ng-show="sidebar.wallets[0]"
-            ng-repeat="item in sidebar.wallets track by $index"
-            ng-class="{'selected': item.id == index.walletId}"
-            class="wallets">
-            <a ng-click="index.setTab('walletHome', false, 0, true); sidebar.switchWallet(item.id, index.walletId,'walletHome');">
-                <div class="avatar-wallet" ng-style="{'background-color':item.color}">
-                    {{(item.name || item.id) | limitTo: 1}}
-                </div>
-                <div class="name-wallet text-ellipsis"r>{{item.name || item.id}}</div>
-                <div class="size-12" ng-show="item.n > 1" translate>{{item.m}}-of-{{item.n}}</div>
-            </a>
+      <div class="custom_edit_icon" ng-click="sidebar.switchWalletOpenPreferences(item.id, index.walletId);">
+        <span></span></div>
 
-            <div class="custom_edit_icon" ng-click="sidebar.switchWalletOpenPreferences(item.id, index.walletId);"><span></span></div>
+    </li>
+  </ul>
 
-        </li>
-    </ul>
+  <ul class="off-canvas-list">
 
-    <ul class="off-canvas-list">
+    <li class="menu_links">
+      <a ui-sref="create">
+        <i class="fi-plus size-24 icon"></i>
+        <span translate>Add new wallet</span>
+      </a>
+    </li>
 
-        <li class="menu_links">
-            <a ui-sref="create">
-                <i class="fi-plus size-24 icon"></i>
-                <span translate>Add new wallet</span>
-            </a>
-        </li>
+    <li class="menu_links">
+      <a ui-sref="contacts">
+        <i class="fi-results-demographics size-24 icon"></i>
+        <span translate>Address Book</span>
+      </a>
+    </li>
 
-        <li class="menu_links">
-            <a ui-sref="correspondentDevices">
-                <i class="fi-share size-24 icon vm"></i>
-                <span translate>Paired devices</span>
-            </a>
-        </li>
+    <li class="menu_links">
+      <a ui-sref="correspondentDevices">
+        <i class="fi-share size-24 icon vm"></i>
+        <span translate>Paired devices</span>
+      </a>
+    </li>
 
-        <li class="menu_links">
-            <a ui-sref="preferencesGlobal">
-                <i class="fi-widget size-24 icon vm"></i>
-                <span translate>Settings</span>
-            </a>
-        </li>
+    <li class="menu_links">
+      <a ui-sref="preferencesGlobal">
+        <i class="fi-widget size-24 icon vm"></i>
+        <span translate>Settings</span>
+      </a>
+    </li>
 
-    </ul>
+  </ul>
 </nav>

@@ -1,23 +1,28 @@
-(function () {
+(() => {
   'use strict';
 
   angular
     .module('copayApp.controllers')
     .controller('ContactsController', ContactsController);
 
-  ContactsController.$inject = ['addressbookService', 'storageService', '$log'];
+  ContactsController.$inject = ['addressbookService'];
 
-  function ContactsController(addressbookService, storageService, $log) {
+  function ContactsController(addressbookService) {
     const contacts = this;
 
     addressbookService.list((err, list) => {
-      $log.debug(err);
       contacts.list = list;
     });
 
     contacts.toggleFavorite = (contact) => {
       contact.favorite = !contact.favorite;
-      console.log(contact);
+
+      addressbookService.update(contact, (err) => {
+        if (err) {
+          contact.favorite = !contact.favorite;
+          console.error(err);
+        }
+      });
     };
   }
-}());
+})();

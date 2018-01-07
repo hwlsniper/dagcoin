@@ -19,7 +19,7 @@
 // Setting up route
   angular
     .module('copayApp')
-    .config((historicLogProvider, $provide, $logProvider, $stateProvider, $urlRouterProvider, $compileProvider, ScrollBarsProvider) => {
+    .config((historicLogProvider, $provide, $logProvider, $stateProvider, $urlRouterProvider, $compileProvider, ScrollBarsProvider, ngDialogProvider) => {
       ScrollBarsProvider.defaults = {
         autoHideScrollbar: true,
         scrollButtons: {
@@ -33,6 +33,13 @@
         },
         axis: 'y'
       };
+
+      ngDialogProvider.setDefaults({
+        showClose: false,
+        closeByDocument: true,
+        closeByEscape: true,
+        closeByNavigation: true
+      });
 
       $urlRouterProvider.otherwise('/');
 
@@ -504,12 +511,13 @@
         .state('contacts', {
           url: '/contacts',
           params: {
-            backTo: 'walletHome'
+            backTo: null
           },
           needProfile: true,
           views: {
             main: {
-              templateUrl: 'controllers/contacts/contacts.template.html'
+              templateUrl: 'controllers/contacts/contacts.template.html',
+              controller: 'ContactsController as contacts'
             },
           }
         })
@@ -521,7 +529,8 @@
           needProfile: true,
           views: {
             main: {
-              templateUrl: 'controllers/contacts/contact/contact.template.html'
+              templateUrl: 'controllers/contacts/contact/contact.template.html',
+              controller: 'ContactController as contact',
             },
           }
         })

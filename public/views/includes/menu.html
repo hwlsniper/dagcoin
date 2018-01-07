@@ -2,7 +2,7 @@
   <ul>
     <li ng-repeat="item in index.menu" ng-class="{'active': tab == item.link}">
       <a ng-click="index.setTab(item, false, 0, true)" id="menu-{{item.link}}">
-        <svg class="icon {{item.icon}}">
+        <svg class="icon {{item.icon}}" style="width: 24px;">
           <use xlink:href="{{index.getSvgSrc(item.icon)}}"></use>
         </svg>
         <span>{{ item.title|translate }}</span>

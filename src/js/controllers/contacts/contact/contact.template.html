@@ -1,6 +1,12 @@
-<dag-nav-bar title="{{ 'Contact' | translate }}" invert></dag-nav-bar>
+<dag-nav-bar title="{{ 'Contact' | translate }}" invert>
+  <div class="navbar-container-triggers navbar-container-triggers-right">
+    <a ng-click="contact.editContact()">
+      <svg-icon name="more_horiz"></svg-icon>
+    </a>
+  </div>
+</dag-nav-bar>
 
-<div class="content" ng-controller="ContactController as contact">
+<div class="content">
   <div>{{contact.address}}</div>
   <div>{{contact.first_name}}</div>
   <div>{{contact.last_name}}</div>
