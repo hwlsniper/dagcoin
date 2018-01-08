@@ -6,8 +6,39 @@
   </div>
 </dag-nav-bar>
 
-<div class="content">
-  <div>{{contact.address}}</div>
-  <div>{{contact.first_name}}</div>
-  <div>{{contact.last_name}}</div>
+<div class="content contact">
+  <div class="contact_card">
+    <div class="contact_meta">
+      <div class="avatar"></div>
+      <div class="contact_meta_full_name">{{contact.first_name}} {{contact.last_name}}</div>
+      <div class="contact_meta_triggers" style="display: none">
+        <ul>
+          <li>
+            <svg-icon name="paper-plane-o"></svg-icon>
+            <span translate>Send</span>
+          </li>
+          <li>
+            <svg-icon name="timeline"></svg-icon>
+            <span translate>History</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="contact_info">
+      <ul>
+        <li ng-if="contact.address">
+          <div class="key" translate>address</div>
+          <div class="value contact_info_description">{{contact.address}}</div>
+        </li>
+        <li ng-if="contact.email">
+          <div class="key" translate>email</div>
+          <div class="value contact_info_description">{{contact.email}}</div>
+        </li>
+        <li ng-if="contact.description">
+          <div class="key" translate>description</div>
+          <div class="value contact_info_description">{{contact.description}}</div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

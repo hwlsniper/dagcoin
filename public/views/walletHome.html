@@ -4,13 +4,8 @@
 
 <dag-nav-bar title="{{ 'My Wallet' | translate}}">
   <qr-scanner ng-if="tab === 'send' && index.isComplete"
-              on-scan="index.onQrCodeScanned(data)"
-              before-scan="index.onBeforeScan()">
+              on-scan="index.onQrCodeScanned(data)">
   </qr-scanner>
-  <div ng-if="tab !== 'send' && index.isComplete" class="navbar-container-triggers navbar-container-triggers-right"><a
-    ui-sref="contacts">
-    <svg-icon name="perm_contact_calendar2"></svg-icon>
-  </a></div>
 </dag-nav-bar>
 
 <div ng-controller="walletHomeController as home">
@@ -173,15 +168,12 @@
                       <div class="transaction_title">{{transactionStatus(transaction).title}}</div>
                       <div ng-if="transaction.action === 'received'">
                         <div class="transaction_address" ng-repeat="address in transaction.arrPayerAddresses">
-                          <a ng-if="transactionAddress(address).address"
-                             ui-sref="transactions({address: transactionAddress(address).address})">{{transactionAddress(transaction.addressTo).fullName}}</a>
-                          <span
-                            ng-if="!transactionAddress(address).address">{{transactionAddress(address).fullName}}</span>
+                          <span ng-if="transactionAddress(address).address">{{transactionAddress(transaction.addressTo).fullName}}</span>
+                          <span ng-if="!transactionAddress(address).address">{{transactionAddress(address).fullName}}</span>
                         </div>
                       </div>
                       <div class="transaction_address" ng-if="transaction.action === 'sent'">
-                        <a ng-if="transactionAddress(transaction.addressTo).address"
-                           ui-sref="transactions({address: transactionAddress(transaction.addressTo).address})">{{transactionAddress(transaction.addressTo).fullName}}</a>
+                        <span ng-if="transactionAddress(transaction.addressTo).address">{{transactionAddress(transaction.addressTo).fullName}}</span>
                         <span ng-if="!transactionAddress(transaction.addressTo).address">{{transactionAddress(transaction.addressTo).fullName}}</span>
                       </div>
                     </td>

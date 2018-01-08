@@ -6,42 +6,83 @@
   </div>
 </dag-nav-bar>
 
-<div class="content contacts">
-  <dag-tabset>
-    <dag-tab heading="{{ 'contacts' | translate }}">
-      <div class="contacts_search_bar">
+<div class="content contacts" ng-class="{'no_contacts' : !contacts.listTotal}">
+  <div ng-if="!contacts.listTotal" class="no_contacts_message">
+    <svg-icon name="agenda"></svg-icon>
+    <p>Currently you don't have any contacts in your address book.</p>
+    <p>Press "+" in the right upper corner to add your first contact.</p>
+  </div>
+  <dag-tabset ng-if="contacts.listTotal">
+    <dag-tab heading="{{ 'contacts' | translate }}" tab-click="contacts.clearFilter()">
+      <!--<div class="contacts_search_bar">
         <svg-icon name="search2"></svg-icon>
-        <input class="contacts_search_bar_input" type="text" name="search" ng-model="search"
+        <svg-icon name="cancel" class="clear_icon" ng-click="contacts.clearFilter()"></svg-icon>
+        <input class="contacts_search_bar_input" type="text" name="search" ng-change="contacts.filterList()"
+               ng-model="contacts.search"
                placeholder="{{ 'Search' | translate}}">
-      </div>
+      </div>-->
 
       <div class="contacts_list">
-        <table>
-          <tbody>
-          <tr ng-repeat="(address, contact) in contacts.list">
-            <td class="contacts_list_contact_favorite" ng-click="contacts.toggleFavorite(contact)">
-              <div class="contacts_list_contact_favorite_trigger" ng-class="{'selected' : contact.favorite}">
-                <svg-icon name="star"></svg-icon>
-                <svg-icon name="star_border"></svg-icon>
-              </div>
-            </td>
-            <td class="contacts_list_contact_info">
-              <a class="contacts_list_contact_info_full_name" ui-sref="contact({address: address})">{{contact.first_name}}</a>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <div ng-repeat="(letter, list) in contacts.list">
+          <h4 class="contacts_list_letter">{{letter}}</h4>
+          <table>
+            <tbody>
+            <tr ng-repeat="contact in list">
+              <td class="contacts_list_contact_info">
+                <div class="avatar"></div>
+                <a class="contacts_list_contact_info_full_name" ui-sref="contact({address: '{{contact.address}}'})">{{contact.first_name}}
+                  {{contact.last_name}}</a>
+                <div class="contacts_list_contact_info_email">{{contact.email}}</div>
+              </td>
+              <td class="contacts_list_contact_favorite" ng-click="contacts.toggleFavorite(contact)">
+                <div class="contacts_list_contact_favorite_trigger" ng-class="{'selected' : contact.favorite}">
+                  <svg-icon name="star"></svg-icon>
+                  <svg-icon name="star_border"></svg-icon>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </dag-tab>
-    <dag-tab heading="{{ 'favorites' | translate }}">
-
-      <div class="contacts_search_bar">
+    <dag-tab heading="{{ 'favorites' | translate }}" tab-click="contacts.clearFilter()">
+      <!--<div class="contacts_search_bar">
         <svg-icon name="search2"></svg-icon>
-        <input class="contacts_search_bar_input" type="text" name="search" ng-model="search"
+        <svg-icon name="cancel" class="clear_icon" ng-click="contacts.clearFilter()"></svg-icon>
+        <input class="contacts_search_bar_input" type="text" name="search" ng-change="contacts.filterList()"
+               ng-model="contacts.search"
                placeholder="{{ 'Search' | translate}}">
-      </div>
+      </div>-->
 
-      Favorites
+      <div class="contacts_list" ng-if="contacts.favoriteListTotal">
+        <div ng-repeat="(letter, list) in contacts.favoriteList">
+          <h4 class="contacts_list_letter">{{letter}}</h4>
+          <table>
+            <tbody>
+            <tr ng-repeat="contact in list">
+              <td class="contacts_list_contact_info">
+                <div class="avatar"></div>
+                <a class="contacts_list_contact_info_full_name" ui-sref="contact({address: '{{contact.address}}'})">{{contact.first_name}}
+                  {{contact.last_name}}</a>
+                <div class="contacts_list_contact_info_email">{{contact.email}}</div>
+              </td>
+              <td class="contacts_list_contact_favorite" ng-click="contacts.toggleFavorite(contact)">
+                <div class="contacts_list_contact_favorite_trigger" ng-class="{'selected' : contact.favorite}">
+                  <svg-icon name="star"></svg-icon>
+                  <svg-icon name="star_border"></svg-icon>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="no_contacts_message" ng-if="contacts.favoriteListTotal === 0">
+        <svg-icon name="favorite_star"></svg-icon>
+        <p>You don't have any favorite contacts selected.</p>
+        <p>To select a favorite contact press <svg-icon name="star_border"></svg-icon> next to contact's name.</p>
+      </div>
     </dag-tab>
   </dag-tabset>
 

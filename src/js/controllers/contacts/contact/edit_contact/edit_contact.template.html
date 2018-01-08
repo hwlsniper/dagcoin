@@ -1,16 +1,8 @@
-<dag-nav-bar title="{{ 'New Contact' | translate }}" invert>
-  <qr-scanner on-scan="contact.onQrCodeScanned(data)">
-  </qr-scanner>
-</dag-nav-bar>
+<dag-nav-bar title="{{ 'Edit Contact' | translate }}" go-back-params="{{contact.backParams}}" invert></dag-nav-bar>
 
 <div class="content" ng-scrollbars>
   <div class="contact_form">
-    <form name="new_contact" ng-submit="contact.create()">
-      <div class="input-wrap">
-        <label for="address">{{ 'Wallet address' | translate}}</label>
-        <input id="address" type="text" ng-model="contact.address" name="address">
-        <div class="has-error" ng-if="contact.address_error">{{contact.address_error}}</div>
-      </div>
+    <form name="new_contact" ng-submit="contact.update()">
 
       <div class="input-wrap">
         <label for="first_name">{{ 'First name' | translate}}</label>

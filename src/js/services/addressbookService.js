@@ -38,7 +38,6 @@
         if (!contacts[addr]) {
           return cb(false, false);
         }
-
         return cb(false, contacts[addr]);
       });
     }
@@ -102,7 +101,7 @@
         }
         const addressBook = ab;
 
-        if (addressBook(entry.address)) {
+        if (addressBook[entry.address]) {
           return cb('Address already exists');
         }
 
@@ -117,14 +116,13 @@
     }
 
     function update(entry, cb) {
-      list((listError, ab) => {
+      list((listError) => {
         if (listError) {
           return cb(listError);
         }
-        const addressBook = ab;
 
-        addressBook[entry.address] = entry;
-        return storageService.set(addressBookKey(), JSON.stringify(addressBook), (setAddressbookError) => {
+        contacts[entry.address] = entry;
+        return storageService.set(addressBookKey(), JSON.stringify(contacts), (setAddressbookError) => {
           if (setAddressbookError) {
             return cb(`Error updating entry: ${entry.address}`);
           }
@@ -134,24 +132,25 @@
     }
 
     function remove(addr, cb) {
-      root.list((err, ab) => {
+      list((err, ab) => {
         if (err) {
           return cb(err);
         }
-        if (!ab[addr]) {
+        if (!contacts[addr]) {
           return cb('Entry does not exist');
         }
-        delete ab[addr];
+        delete contacts[addr];
         return storageService.set(addressBookKey(), JSON.stringify(ab), (error) => {
           if (error) {
             return cb('Error deleting entry');
           }
-          return root.list((listError, addressBook) => cb(listError, addressBook));
+          return list((listError, addressBook) => cb(listError, addressBook));
         });
       });
     }
 
     function removeAll(cb) {
+      contacts = {};
       storageService.remove(addressBookKey(), (err) => {
         if (err) {
           return cb('Error deleting addressbook');

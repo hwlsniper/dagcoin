@@ -522,27 +522,43 @@
           }
         })
         .state('contact', {
-          url: '/contacts/:address',
+          url: '/contact',
           params: {
-            backTo: 'contacts'
+            backTo: 'contacts',
+            address: null
           },
           needProfile: true,
           views: {
             main: {
               templateUrl: 'controllers/contacts/contact/contact.template.html',
               controller: 'ContactController as contact',
-            },
+            }
           }
         })
         .state('new_contact', {
-          url: '/contacts/contact/new',
+          url: '/contact/new',
           params: {
             backTo: 'contacts'
           },
           needProfile: true,
           views: {
             main: {
-              templateUrl: 'controllers/contacts/contact/new_contact/new_contact.template.html'
+              templateUrl: 'controllers/contacts/contact/new_contact/new_contact.template.html',
+              controller: 'NewContactController as contact'
+            }
+          }
+        })
+        .state('edit_contact', {
+          url: '/contact/edit',
+          params: {
+            backTo: 'contact',
+            address: null
+          },
+          needProfile: true,
+          views: {
+            main: {
+              templateUrl: 'controllers/contacts/contact/edit_contact/edit_contact.template.html',
+              controller: 'EditContactController as contact'
             },
           }
         })

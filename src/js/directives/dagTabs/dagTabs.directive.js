@@ -93,7 +93,9 @@
       scope: {
         heading: '@',
         tabClick: '&',
-        selected: '='
+        selected: '=',
+        onLeave: '&',
+        onEnter: '&'
       },
       link: ($scope, element, attr, dagtabsetCtrl) => {
         $scope.active = false;
