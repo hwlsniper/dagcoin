@@ -8,19 +8,17 @@
   </qr-scanner>
 </dag-nav-bar>
 
-<div ng-controller="walletHomeController as home">
-  <div class="onGoingProcess" ng-show="index.isOffline">
-    <div class="onGoingProcess-content">
-      <dag-spinner></dag-spinner>
-      <span translate>Reconnecting to Wallet Service...</span>
-    </div>
-  </div>
 
-  <div class="onGoingProcess" ng-show="index.anyOnGoingProcess && !index.isOffline">
+<div class="content" ng-scrollbars>
+  <div class="onGoingProcess" ng-show="index.isOffline || (index.anyOnGoingProcess && !index.isOffline) || (home.onGoingProcess && !index.anyOnGoingProces && !index.isOffline)">
     <div class="onGoingProcess-content">
       <dag-spinner></dag-spinner>
-      <span translate
-            ng-show="['openingWallet', 'updatingStatus', 'updatingBalance', 'updatingPendingTxps', 'updatingHistory'].indexOf(index.onGoingProcessName) >= 0">Updating Wallet...</span>
+      <!-- 1 -->
+      <span translate ng-show="index.isOffline">Reconnecting to Wallet Service...</span>
+      <!-- 2 -->
+      <span ng-show="home.onGoingProcess && !index.anyOnGoingProces && !index.isOffline">{{home.onGoingProcess|translate}}...</span>
+      <!-- 3 -->
+      <span translate ng-show="['openingWallet', 'updatingStatus', 'updatingBalance', 'updatingPendingTxps', 'updatingHistory'].indexOf(index.onGoingProcessName) >= 0">Updating Wallet...</span>
       <span translate ng-show="index.onGoingProcessName == 'scanning'">Scanning Wallet funds...</span>
       <span translate ng-show="index.onGoingProcessName == 'recreating'">Recreating Wallet...</span>
       <span translate ng-show="index.onGoingProcessName == 'generatingCSV'">Generating .csv file...</span>
@@ -30,14 +28,7 @@
     </div>
   </div>
 
-  <div class="onGoingProcess" ng-show="home.onGoingProcess && !index.anyOnGoingProces && !index.isOffline">
-    <div class="onGoingProcess-content">
-      <dag-spinner></dag-spinner>
-      <span>{{home.onGoingProcess|translate}}...</span>
-    </div>
-  </div>
-
-  <div class="oh" ng-show="!index.noFocusedWallet">
+  <div ng-show="!index.noFocusedWallet">
 
 
     <!--
@@ -46,7 +37,7 @@
 
     -->
 
-    <div id="walletHome" class="walletHome tab-view tab-in" ng-class="{'not_backed_up' : index.needsBackup}" ng-scrollbars>
+    <div id="walletHome" class="walletHome tab-view tab-in">
       <div class="introduction-svg" ng-include="'views/includes/background.html'"></div>
       <div class="p-wallet js-introduction">
         <div class="p-wallet__price-block">
@@ -220,7 +211,7 @@
     <!--
     send
     -->
-    <div id="send" class="send tab-view cordova-scrollable" ng-scrollbars>
+    <div id="send" class="send tab-view cordova-scrollable">
       <div class="introduction-svg" ng-include="'views/includes/background.html'"></div>
       <div class="p-share js-introduction">
         <div class="p-wrap" style="width: 300px;margin: 0 auto;">

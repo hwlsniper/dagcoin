@@ -153,6 +153,7 @@
           views: {
             main: {
               templateUrl: 'views/walletHome.html',
+              controller: 'walletHomeController as home'
             },
           },
         })
@@ -260,6 +261,7 @@
           views: {
             chat: {
               templateUrl: 'views/correspondentDevices.html',
+              controller: 'correspondentDevicesController'
             },
           },
         })

@@ -35,7 +35,7 @@ h1, h2, h3, h5, h6 {
   color: #2c3e50;
 }
 
-h4{
+h4 {
   font-size: 12px;
   text-transform: uppercase;
   color: #2c3e50;
@@ -338,16 +338,17 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill, inpu
 
 .main {
   background-color: #fff;
-  padding: 0 0 58px;
+  padding: 0;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
   width: 100%;
-  position: absolute;
-  top: $nav_bar_height;
-  bottom: 0;
+  position: relative;
   overflow: auto;
+  flex: 1;
 
   &.disclaimer {
     top: 0;
@@ -1685,7 +1686,7 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
   left: 0;
   width: 100%;
   bottom: 71px;
-  position: absolute;
+  position: fixed;
   z-index: 1020;
 }
 
@@ -2474,14 +2475,10 @@ canvas {
 }
 
 .navbar-wrap {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   width: 100%;
   background: #fff;
   border-top: 1px solid #f8f8f8;
-  z-index: 2;
   padding: 0 10px;
   height: 50px;
 
@@ -2699,16 +2696,9 @@ canvas {
 
 .tab-view {
   display: none;
-  transform: translate3d(-100%, 0, 0);
   width: 100%;
-  position: absolute;
-  top: 50px;
-  bottom: 50px;
+  position: relative;
   overflow: auto;
-
-  &.not_backed_up{
-    top: 70px;
-  }
 
   .svg-container.wallet:nth-child(2) {
     position: fixed;
@@ -2718,11 +2708,6 @@ canvas {
 
 .tab-in {
   display: block;
-  transform: translate3d(0, 0, 0) !important;
-}
-
-.tab-out {
-  transform: translate3d(-100%, 0, 0) !important;
 }
 
 .send.tab-in .p-wrap {
@@ -3000,7 +2985,8 @@ p.color_red {
   color: #fff;
   text-align: center;
   z-index: 2;
-  padding: 3px 0;
+  height: 26px;
+  line-height: 26px;
 }
 
 .avatar {
@@ -3076,7 +3062,7 @@ p.color_red {
   }
 }
 
-.ngdialog{
+.ngdialog {
   .ngdialog-content {
     position: fixed;
     width: 100%;
@@ -3084,12 +3070,12 @@ p.color_red {
     bottom: 0;
     -webkit-animation: slideInUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     animation: slideInUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-    box-shadow: 0 0 10px 5px rgba(50,50,50,0.1);
+    box-shadow: 0 0 10px 5px rgba(50, 50, 50, 0.1);
 
-    >ul{
+    > ul {
       padding: 15px;
 
-      >li{
+      > li {
         @extend .transition;
         padding: 10px;
         border-bottom: 1px solid #fbfbfb;
@@ -3098,34 +3084,34 @@ p.color_red {
         cursor: pointer;
         font-size: 14px;
 
-        >svg-icon{
+        > svg-icon {
           color: #888;
           top: -2px;
           margin-right: 10px;
 
-          >svg{
+          > svg {
             width: 18px;
             height: 18px;
           }
         }
 
-        &:first-child{
+        &:first-child {
           border-top: none;
         }
 
-        &:last-child{
+        &:last-child {
           border-bottom: none;
         }
 
-        &:hover{
+        &:hover {
           background: #f9f8f8;
         }
       }
     }
   }
 
-  &.ngdialog-closing{
-    .ngdialog-content{
+  &.ngdialog-closing {
+    .ngdialog-content {
       -webkit-animation: slideOutDown 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
       animation: slideOutDown 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     }
