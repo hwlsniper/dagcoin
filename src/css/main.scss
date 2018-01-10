@@ -2702,9 +2702,13 @@ canvas {
   transform: translate3d(-100%, 0, 0);
   width: 100%;
   position: absolute;
-  top: 70px;
+  top: 50px;
   bottom: 50px;
   overflow: auto;
+
+  &.not_backed_up{
+    top: 70px;
+  }
 
   .svg-container.wallet:nth-child(2) {
     position: fixed;
