@@ -46,7 +46,7 @@
 
     -->
 
-    <div id="walletHome" class="walletHome tab-view tab-in" ng-scrollbars>
+    <div id="walletHome" class="walletHome tab-view tab-in" ng-class="{'not_backed_up' : index.needsBackup}" ng-scrollbars>
       <div class="introduction-svg" ng-include="'views/includes/background.html'"></div>
       <div class="p-wallet js-introduction">
         <div class="p-wallet__price-block">
@@ -376,15 +376,10 @@
         </div>
       </div>
     </div>
-
-
   </div>
 
   <div id="{{view.id}}" class="{{view.class}} tab-view" ng-repeat="view in index.addonViews"
        ng-include="view.template">
   </div>
-
 </div>
-</div>
-<div class="extra-margin-bottom"></div>
 <div ng-include="'views/includes/menu.html'" ng-show="!index.noFocusedWallet"></div>
