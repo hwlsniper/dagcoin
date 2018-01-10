@@ -1,7 +1,8 @@
-<div ng-controller="correspondentDevicesController">
-  <dag-nav-bar title="{{ 'Paired devices' | translate}}" ng-show="state.is('correspondentDevices')"></dag-nav-bar>
+<dag-nav-bar title="{{ 'Paired devices' | translate}}" ng-show="state.is('correspondentDevices')"></dag-nav-bar>
+
+<div class="content">
 	<div ui-view="dialog"></div>
-    <div class="m20b tab-view tab-in" ng-show="state.is('correspondentDevices')" id="chat">
+    <div class="tab-view tab-in" ng-show="state.is('correspondentDevices')" id="chat">
       <ul class="no-bullet m0 correspondentList" ng-init="readList()">
         <li class="p10 line-b"
             ng-repeat="correspondent in list"
