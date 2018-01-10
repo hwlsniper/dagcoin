@@ -28,9 +28,9 @@
 
     root.set = function (lang) {
       $log.debug(`Setting default language: ${lang}`);
-      gettextCatalog.setCurrentLanguage(lang);
-      if (lang !== ENGLISH) { gettextCatalog.loadRemote(`languages/${lang}.json`); }
-      amMoment.changeLocale(lang);
+      gettextCatalog.setCurrentLanguage(ENGLISH);
+      // if (lang !== ENGLISH) { gettextCatalog.loadRemote(`languages/${lang}.json`); }
+      amMoment.changeLocale(ENGLISH);
       root.currentLanguage = lang;
     };
 
