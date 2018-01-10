@@ -1,6 +1,5 @@
 /* global inject */
-angular.module('copayApp.directives', [])
-.value('isCordova', false);
+angular.module('copayApp.directives', []);
 
 describe('svgIcon directive', () => {
   let element;

@@ -492,21 +492,6 @@
           });
         };
 
-        this.copyAddress = function (addr) {
-          if (isCordova) {
-            window.cordova.plugins.clipboard.copy(addr);
-            window.plugins.toast.showShortCenter(gettextCatalog.getString('Copied to clipboard'));
-          } else if (nodeWebkit.isDefined()) {
-            nodeWebkit.writeToClipboard(addr);
-          }
-
-          $scope.tooltipCopiedShown = true;
-
-          $timeout(() => {
-            $scope.tooltipCopiedShown = false;
-          }, 1000);
-        };
-
         this.shareAddress = function (addr) {
           if (isCordova) {
             if (isMobile.Android() || isMobile.Windows()) {

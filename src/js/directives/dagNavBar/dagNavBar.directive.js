@@ -34,7 +34,7 @@
             $state.go($stateParams.backTo || $scope.goBack || 'walletHome');
           }
         };
-        $scope.openMenu = () => $rootScope.openMenu();
+        $scope.openSideBar = $rootScope.openSideBar;
       }
     };
   }

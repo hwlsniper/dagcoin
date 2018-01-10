@@ -1005,6 +1005,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
 
         this.csvHistory = function () {
           const CSV_CONTENT_ID = '__csv_content';
+
           function setCvsContent(data) {
             const csvElement = document.getElementById(CSV_CONTENT_ID);
             if (lodash.isEmpty(csvElement)) {
@@ -1017,7 +1018,8 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
           function saveFile(name, data) {
             const chooser = document.querySelector(name);
             setCvsContent(data);
-            chooser.removeEventListener('change', () => { });
+            chooser.removeEventListener('change', () => {
+            });
             chooser.addEventListener('change', function (evt) {
               const fs = require('fs');
               const csvElement = document.getElementById(CSV_CONTENT_ID);
@@ -1210,7 +1212,9 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
             if (lodash.isFunction(cb)) {
               try {
                 cb(false);
-              } catch (e) { console.error(e); }
+              } catch (e) {
+                console.error(e);
+              }
             }
             return;
           }
@@ -1230,12 +1234,14 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
                 self.txHistoryError = true;
               }
 
-               $rootScope.$emit('Local/UpdateHistoryEnd');
+              $rootScope.$emit('Local/UpdateHistoryEnd');
               $rootScope.$apply();
               if (lodash.isFunction(cb)) {
                 try {
                   cb(lodash.isEmpty(err));
-                } catch (e) { console.error(e); }
+                } catch (e) {
+                  console.error(e);
+                }
               }
             });
           });
@@ -1301,24 +1307,6 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
           });
         };
 
-        self.openMenu = () => {
-          backButton.menuOpened = true;
-          go.swipe(true);
-        };
-
-        $rootScope.openMenu = () => {
-          self.openMenu();
-        };
-
-        self.closeMenu = () => {
-          backButton.menuOpened = false;
-          go.swipe();
-        };
-
-        $rootScope.closeMenu = () => {
-          self.closeMenu();
-        };
-
         self.swipeRight = function () {
           if (!self.bSwipeSuspended) {
             self.openMenu();
@@ -1342,10 +1330,6 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         self.retryScan = function () {
           const self = this;
           self.startScan(self.walletId);
-        };
-        self.onQrCodeScanned = function (data) {
-          go.handleUri(data);
-          // $rootScope.$emit('dataScanned', data);
         };
 
         self.openSendScreen = function () {
@@ -1515,9 +1499,9 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
           go.walletHome();
         });
 
-      $rootScope.$on('Local/InitialRecoveryInProgress', () => {
-        self.setOngoingProcess('recoveringFromSeed', true);
-      });
+        $rootScope.$on('Local/InitialRecoveryInProgress', () => {
+          self.setOngoingProcess('recoveringFromSeed', true);
+        });
 
 //  self.debouncedUpdate = lodash.throttle(function() {
 //    self.updateAll({

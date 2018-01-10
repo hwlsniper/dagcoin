@@ -216,68 +216,6 @@
       </div> <!-- END WalletHome -->
     </div>
 
-    <!--
-
-    receive
-
-    -->
-    <div id="receive" class="receive p-share tab-view cordova-scrollable" ng-scrollbars style="padding-bottom: 0">
-      <div class="introduction-svg" ng-include="'views/includes/background.html'"></div>
-      <div class="p-wrap text-center m20t">
-
-        <h2 style="padding: 10px 20px;font-weight: 400;font-size: 14px;margin-top: 40px;">{{'Tap the' | translate}}
-          <strong>QR-code</strong> {{'to copy its address.' | translate}}<br/>{{'Share it with the sender via email or
-          text.' | translate}}</h2>
-
-        <!-- Address-->
-        <div class="text-center">
-          <div class="box-notification" ng-show="home.addrError">
-                <span class="text-warning">
-                  {{home.addrError|translate}}
-                </span>
-          </div>
-
-          <div ng-click="home.copyAddress(home.addr[index.walletId])"
-               ng-show="home.addr[index.walletId] || home.generatingAddress">
-            <dag-qr-code url="{{home.protocol}}:{{home.addr[index.walletId]}}"></dag-qr-code>
-
-            <div ng-show="home.generatingAddress" style="position:relative; top:-226px; height:0px">
-              <div style="height:220px; width:220px; margin:auto; background: url(img/qr.png) white">
-                <div class="spinner" style="margin-top:80px">
-                  <div class="rect1"></div>
-                  <div class="rect2"></div>
-                  <div class="rect3"></div>
-                  <div class="rect4"></div>
-                  <div class="rect5"></div>
-                </div>
-              </div>
-            </div>
-            <div ng-show="!index.isCordova" ng-class="{'visible': tooltipCopiedShown}"
-                 class="tooltip radius tip-top" translate>
-              <svg-icon name="done"></svg-icon>
-              Copied!
-            </div>
-          </div>
-          <div class="m10t" ng-hide>
-            <h4 ng-class="{'enable_text_select': !index.isCordova}" class="size-12">
-              {{index.shared_address || (home.generatingAddress ? '...' : home.addr[index.walletId])}}
-
-            </h4>
-          </div>
-        </div>
-        <div class="page-action">
-          <a ng-show="index.isCordova" href="#" ng-click="home.shareAddress(home.addr[index.walletId])"
-             class="btn btn_red-full" translate>Share wallet link</a>
-          <div ng-show="index.isCordova" class="page-action__info">
-            <span translate>Share the link above to receive payments.</span></div>
-        </div>
-        <a class="size-14"
-           ng-click="home.openCustomizedAmountModal(index.shared_address || home.addr[index.walletId])">
-          <span translate>Request a specific amount</span>
-        </a>
-      </div>
-    </div> <!-- END Receive -->
-
 
     <!--
     send

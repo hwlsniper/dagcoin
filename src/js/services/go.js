@@ -129,39 +129,6 @@
         root.openExternalLink(url, target);
       };
 
-      function handleUri(uri) {
-        console.log(`handleUri ${uri}`);
-        require('byteballcore/uri.js').parseUri(uri, {
-          ifError(err) {
-            console.log(err);
-            const conf = require('byteballcore/conf.js');
-            const noPrefixRegex = new RegExp(`.*no.*${conf.program}.*prefix.*`, 'i');
-            if (noPrefixRegex.test(err.toString())) {
-              notification.error(gettextCatalog.getString('Incorrect Dagcoin Address'));
-            } else {
-              notification.error(err);
-            }
-
-            // notification.success(gettextCatalog.getString('Success'), err);
-          },
-          ifOk(objRequest) {
-            console.log(`request: ${JSON.stringify(objRequest)}`);
-            if (objRequest.type === 'address') {
-              root.send(() => {
-                $rootScope.$emit('paymentRequest', objRequest.address, objRequest.amount, objRequest.asset);
-              });
-            } else if (objRequest.type === 'pairing') {
-              $rootScope.$emit('Local/CorrespondentInvitation', objRequest.pubkey, objRequest.hub, objRequest.pairing_secret);
-            } else if (objRequest.type === 'auth') {
-              authService.objRequest = objRequest;
-              root.path('authConfirmation');
-            } else {
-              throw Error(`unknown url type: ${objRequest.type}`);
-            }
-          },
-        });
-      }
-
       function extractByteballArgFromCommandLine(commandLine) {
         const conf = require('byteballcore/conf.js');
         const re = new RegExp(`^${conf.program}:`, 'i');
@@ -294,8 +261,6 @@
           $rootScope.$emit('Local/Resume');
         }, false);
       }
-
-      root.handleUri = handleUri;
 
       return root;
     }).factory('$exceptionHandler', ($log) => {

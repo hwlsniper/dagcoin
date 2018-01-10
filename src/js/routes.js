@@ -19,6 +19,7 @@
 // Setting up route
   angular
     .module('copayApp')
+    .constant('isCordova', !!window.cordova)
     .config((historicLogProvider, $provide, $logProvider, $stateProvider, $urlRouterProvider, $compileProvider, ScrollBarsProvider, ngDialogProvider) => {
       ScrollBarsProvider.defaults = {
         autoHideScrollbar: true,
@@ -152,6 +153,32 @@
           views: {
             main: {
               templateUrl: 'views/walletHome.html',
+            },
+          },
+        })
+        .state('send', {
+          url: '/',
+          walletShouldBeComplete: true,
+          needProfile: true,
+          deepStateRedirect: true,
+          sticky: true,
+          views: {
+            main: {
+              templateUrl: 'controllers/send/send.template.html',
+              controller: 'SendController as vm'
+            },
+          },
+        })
+        .state('receive', {
+          url: '/',
+          walletShouldBeComplete: true,
+          needProfile: true,
+          deepStateRedirect: true,
+          sticky: true,
+          views: {
+            main: {
+              templateUrl: 'controllers/receive/receive.template.html',
+              controller: 'ReceiveController as vm'
             },
           },
         })
