@@ -3,7 +3,7 @@ module.exports = function (grunt) {
   function getPlatform() {
     switch (process.platform) {
       case 'win32':
-        return 'win64'; // change to 'win' for both 32 and 64
+        return 'win'; // change to 'win' for both 32 and 64
       case 'linux':
         return 'linux64';
       case 'darwin':
