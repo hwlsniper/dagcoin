@@ -22,7 +22,7 @@
                 addressService,
                 confirmDialog,
                 animationService,
-                addressbookService,
+                AddressBook,
                 correspondentListService,
                 discoveryService,
                 isMobile,
@@ -184,7 +184,7 @@
           return value;
         };
 
-        addressbookService.favorites((err, favorites) => {
+        AddressBook.favorites((err, favorites) => {
           $scope.favorite_contacts = favorites;
         });
 
@@ -201,7 +201,7 @@
 
           let fullName = address;
 
-          addressbookService.getContact(address, (err, contact) => {
+          AddressBook.getContact(address, (err, contact) => {
             if (!err && contact) {
               fullName = `${contact.first_name} ${contact.last_name || ''}`;
             }
@@ -286,7 +286,7 @@
 
             $scope.listEntries = function () {
               $scope.error = null;
-              addressbookService.list((err, ab) => {
+              AddressBook.list((err, ab) => {
                 if (err) {
                   $scope.error = err;
                   return;
@@ -304,7 +304,7 @@
             $scope.add = function (addressbook) {
               $scope.error = null;
               $timeout(() => {
-                addressbookService.add(addressbook, (err, ab) => {
+                AddressBook.add(addressbook, (err, ab) => {
                   if (err) {
                     $scope.error = err;
                     return;
@@ -321,7 +321,7 @@
             $scope.remove = function (addr) {
               $scope.error = null;
               $timeout(() => {
-                addressbookService.remove(addr, (err, ab) => {
+                AddressBook.remove(addr, (err, ab) => {
                   if (err) {
                     $scope.error = err;
                     return;

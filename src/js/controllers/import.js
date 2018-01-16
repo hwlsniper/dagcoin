@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('copayApp.controllers').controller('importController',
-    function ($scope, $rootScope, $state, $location, $timeout, $log, storageService, fileSystemService, isCordova, isMobile, gettextCatalog) {
+    function ($scope, $rootScope, $state, $location, $timeout, $log, storageService, fileSystemService, Device, gettextCatalog) {
       const JSZip = require('jszip');
       const async = require('async');
       const crypto = require('crypto');
       const userAgent = navigator.userAgent;
       let zip;
       let unzip;
-      if (isCordova) {
+      if (Device.isCordova()) {
         zip = new JSZip();
       } else {
         unzip = require('unzip');
@@ -19,10 +19,10 @@
       self.imported = false;
       self.password = '';
       self.error = '';
-      self.iOs = isMobile.iOS();
-      self.android = isMobile.Android();
+      self.iOs = Device.isMobile('iOS');
+      self.android = Device.isMobile('Android');
       self.arrBackupFiles = [];
-      self.androidVersion = isMobile.Android() ? parseFloat(userAgent.slice(userAgent.indexOf('Android') + 8)) : null;
+      self.androidVersion = self.android ? parseFloat(userAgent.slice(userAgent.indexOf('Android') + 8)) : null;
       self.oldAndroidFilePath = null;
       self.oldAndroidFileName = '';
       self.isInitial = $state.includes('initialRecovery');
@@ -167,7 +167,7 @@
       }
 
       function unzipAndWriteFiles(data, password) {
-        if (isCordova) {
+        if (Device.isCordova()) {
           zip.loadAsync(decrypt(data, password)).then((zippedFile) => {
             if (!zippedFile.file('light')) {
               self.imported = false;

@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('copayApp.controllers').controller('copayersController',
-    function ($scope, $rootScope, $timeout, $log, $modal, profileService, go, notification, isCordova, gettextCatalog, animationService) {
+    function ($scope, $rootScope, $timeout, $log, $modal, profileService, go, notification, Device, gettextCatalog, animationService) {
       const self = this;
 
       const deleteMessage = gettextCatalog.getString('Are you sure you want to delete this wallet?');
@@ -19,7 +19,7 @@
           return;
         }
         self.loading = false;
-        self.isCordova = isCordova;
+
       };
 
       const deleteWallet = function () {
@@ -81,7 +81,7 @@
       };
 
       self.deleteWallet = function () {
-        if (isCordova) {
+        if (Device.isCordova()) {
           navigator.notification.confirm(
             deleteMessage,
             (buttonIndex) => {

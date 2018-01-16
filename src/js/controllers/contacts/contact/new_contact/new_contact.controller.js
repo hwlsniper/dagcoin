@@ -5,9 +5,9 @@
     .module('copayApp.controllers')
     .controller('NewContactController', NewContactController);
 
-  NewContactController.$inject = ['addressbookService', '$state', 'gettextCatalog'];
+  NewContactController.$inject = ['AddressBook', '$state', 'gettextCatalog'];
 
-  function NewContactController(addressbookService, $state, gettextCatalog) {
+  function NewContactController(AddressBook, $state, gettextCatalog) {
     const contact = this;
 
     contact.onQrCodeScanned = (uri) => {
@@ -34,7 +34,7 @@
     contact.create = () => {
       contact.address_error = '';
 
-      addressbookService.add({
+      AddressBook.add({
         first_name: contact.first_name,
         last_name: contact.last_name,
         address: contact.address,

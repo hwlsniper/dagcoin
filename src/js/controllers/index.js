@@ -15,7 +15,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
                 go,
                 profileService,
                 configService,
-                isCordova,
+                Device,
                 storageService,
                 addressService,
                 gettextCatalog,
@@ -24,8 +24,8 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
                 addonManager,
                 txFormatService,
                 uxLanguage,
-                $state, isMobile,
-                addressbookService,
+                $state,
+                AddressBook,
                 notification,
                 animationService,
                 fundingExchangeProviderService,
@@ -51,13 +51,13 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         const _ = require('lodash');
         breadcrumbs.add('index.js');
         const self = this;
-        self.isCordova = isCordova;
-        self.isSafari = isMobile.Safari();
+        self.isCordova = Device.isCordova();
+        self.isSafari = (Device.isMobile('Safari'));
         self.onGoingProcess = {};
         self.updatingTxHistory = true;
         self.bSwipeSuspended = false;
         self.$state = $state;
-        // self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
+
         self.usePushNotifications = false;
 
         constants.DAG_FEE = 500; // TODO: this is the transaction fee in micro dagcoins 1000 = 0.001 dagcoins
@@ -98,7 +98,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
           });
         }
 
-        if (isCordova && constants.version === '1.0') {
+        if (self.isCordova && constants.version === '1.0') {
           const db = require('byteballcore/db.js');
           db.query('SELECT 1 FROM units WHERE version!=? LIMIT 1', [constants.version], (rows) => {
             if (rows.length > 0) {
@@ -313,7 +313,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         };
 
         const requestApproval = function (question, callbacks) {
-          if (isCordova) {
+          if (self.isCordova) {
             navigator.notification.confirm(
               question,
               (buttonIndex) => {
@@ -482,7 +482,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
                   const arrDestinations = [];
                   Object.keys(assocAmountByAssetAndAddress).forEach((asset) => {
                     const walletSettings = configService.getSync().wallet.settings;
-                    const formattedAsset = isCordova ? asset : (`<span class='small'>${asset}</span><br/>`);
+                    const formattedAsset = self.isCordova ? asset : (`<span class='small'>${asset}</span><br/>`);
                     let currency;
                     let value;
 
@@ -1069,7 +1069,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
           const step = 6;
           // const unique = {};
 
-          if (isCordova) {
+          if (self.isCordova) {
             $log.info('CSV generation not available in mobile');
             return;
           }
@@ -1370,7 +1370,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
             return;
           }
 
-          addressbookService.list((err, ab) => {
+          AddressBook.list((err, ab) => {
             if (err) {
               $log.error('Error getting the addressbook');
               return;

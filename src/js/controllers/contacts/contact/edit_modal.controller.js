@@ -5,15 +5,15 @@
     .module('copayApp.controllers')
     .controller('EditContactModalController', EditContactModalController);
 
-  EditContactModalController.$inject = ['$scope', '$stateParams', 'addressbookService', '$state'];
+  EditContactModalController.$inject = ['$scope', '$stateParams', 'AddressBook', '$state'];
 
-  function EditContactModalController($scope, $stateParams, addressbookService, $state) {
+  function EditContactModalController($scope, $stateParams, AddressBook, $state) {
     const address = $stateParams.address;
 
     $scope.contact = { address };
 
     $scope.removeContact = () => {
-      addressbookService.remove($stateParams.address, () => {
+      AddressBook.remove($stateParams.address, () => {
         $state.go('contacts');
       });
     };

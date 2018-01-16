@@ -4,25 +4,15 @@
   position: relative;
   .dag_tabs_list {
     position: relative;
+    padding: 0 20px;
 
     .dag_tab{
       display: block;
     }
 
-    > .dag_tabs_slider {
-      position: absolute;
-      left: 0;
-      height: 2px;
-      width: 0;
-      bottom: 0;
-      background: $main_color;
-      transform: translate3d(0, 0, 0);
-    }
-
     > ul {
       display: flex;
       list-style-type: none;
-      border-bottom: 1px solid #ddd;
       margin: 0;
       padding: 0;
     }
@@ -44,6 +34,7 @@
       &.active {
         a {
           opacity: 1;
+          border-bottom: 2px solid;
         }
       }
     }

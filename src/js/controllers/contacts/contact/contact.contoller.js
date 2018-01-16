@@ -5,11 +5,11 @@
     .module('copayApp.controllers')
     .controller('ContactController', ContactController);
 
-  ContactController.$inject = ['addressbookService', '$stateParams', 'ngDialog'];
+  ContactController.$inject = ['AddressBook', '$stateParams', 'ngDialog'];
 
-  function ContactController(addressbookService, $stateParams, ngDialog) {
+  function ContactController(AddressBook, $stateParams, ngDialog) {
     const contact = this;
-    addressbookService.getContact($stateParams.address, (err, data) => {
+    AddressBook.getContact($stateParams.address, (err, data) => {
       Object.keys(data).map((key) => {
         contact[key] = data[key];
         return true;

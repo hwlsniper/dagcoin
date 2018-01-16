@@ -45,9 +45,8 @@
     }
   }
 
-  .dag_tabs .dag_tabs_list > ul {
+  .dag_tabs .dag_tabs_list {
     @include gradientBackground($main_color, darken($main_color, 5), top, bottom);
-    border-bottom-color: #a8191e;
   }
 
   .dag_tabs .dag_tabs_list > .dag_tabs_slider {
@@ -108,9 +107,26 @@
   .contacts_list {
     padding: 0 10px;
 
+    .contacts_list_table{
+      padding: 0 20px;
+    }
+
     .contacts_list_letter {
-      color: #a1a7af;
+      color: darken($main_color, 5);
       margin: 10px 0;
+      overflow: hidden;
+      position: relative;
+      font-size: 12px;
+
+      &:after{
+        content: '';
+        width: 100%;
+        position: absolute;
+        left: 15px;
+        height: 1px;
+        background: #f5f5f5;
+        top: 50%;
+      }
     }
 
     table {
@@ -118,8 +134,6 @@
       width: 100%;
 
       td {
-        border-bottom: 1px solid #eee;
-        border-top: 1px solid #eee;
         text-align: left;
         line-height: inherit;
         padding: 15px 20px;
@@ -188,12 +202,7 @@
           .contacts_list_contact_info_full_name {
             font-weight: 700;
             height: 20px;
-          }
-
-          .contacts_list_contact_info_email {
-            font-size: 12px;
-            color: #888;
-            height: 16px;
+            color: #444;
           }
         }
       }

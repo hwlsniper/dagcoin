@@ -5,9 +5,9 @@
     .module('copayApp.controllers')
     .controller('EditContactController', EditContactController);
 
-  EditContactController.$inject = ['$stateParams', 'addressbookService', '$state'];
+  EditContactController.$inject = ['$stateParams', 'AddressBook', '$state'];
 
-  function EditContactController($stateParams, addressbookService, $state) {
+  function EditContactController($stateParams, AddressBook, $state) {
     const contact = this;
     contact.backParams = { address: $stateParams.address };
     let contactData = {};
@@ -18,13 +18,13 @@
       contactData.email = contact.email;
       contactData.description = contact.description;
 
-      addressbookService.update(contactData, () => {
+      AddressBook.update(contactData, () => {
         $state.go('contact', contact.backParams);
       });
     };
 
     contact.address = $stateParams.address;
-    addressbookService.getContact(contact.address, (err, data) => {
+    AddressBook.getContact(contact.address, (err, data) => {
       contactData = data;
       Object.keys(data).map((key) => {
         contact[key] = data[key] || '';

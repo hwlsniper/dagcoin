@@ -3,11 +3,11 @@
 
   angular
     .module('copayApp.services')
-    .factory('addressbookService', addressbookService);
+    .factory('AddressBook', AddressBook);
 
-  addressbookService.$inject = ['storageService', 'profileService'];
+  AddressBook.$inject = ['storageService', 'profileService'];
 
-  function addressbookService(storageService, profileService) {
+  function AddressBook(storageService, profileService) {
     let contacts = false;
 
     return {
@@ -115,16 +115,20 @@
       });
     }
 
-    function update(entry, cb) {
+    function update(addr, params, cb) {
       list((listError) => {
         if (listError) {
           return cb(listError);
         }
 
-        contacts[entry.address] = entry;
+        Object.keys(params).map((key) => {
+          contacts[addr][key] = params[key];
+          return true;
+        });
+
         return storageService.set(addressBookKey(), JSON.stringify(contacts), (setAddressbookError) => {
           if (setAddressbookError) {
-            return cb(`Error updating entry: ${entry.address}`);
+            return cb(`Error updating entry: ${addr}`);
           }
           return cb(false);
         });

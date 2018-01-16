@@ -5,28 +5,18 @@
     .module('copayApp.controllers')
     .controller('ContactsController', ContactsController);
 
-  ContactsController.$inject = ['addressbookService'];
+  ContactsController.$inject = ['AddressBook'];
 
-  function ContactsController(addressbookService) {
+  function ContactsController(AddressBook) {
     const contacts = this;
-
-    contacts.clearFilter = () => {
-      contacts.search = '';
-    };
 
     contacts.toggleFavorite = (contact) => {
       contact.favorite = !contact.favorite;
 
-      addressbookService.update(contact, (err) => {
+      AddressBook.update(contact.address, {favorite: contact.favorite}, (err) => {
         if (err) {
           contact.favorite = !contact.favorite;
           console.error(err);
-        }
-
-        if (contact.favorite) {
-          contacts.favoriteListTotal += 1;
-        } else {
-          contacts.favoriteListTotal -= 1;
         }
 
         loadList();
@@ -39,10 +29,19 @@
       contacts.favoriteList = {};
       contacts.favoriteListTotal = 0;
 
-      addressbookService.list((err, list) => {
+      AddressBook.list((err, list) => {
+        /**
+         * Populate Contacts and Favorite Contacts
+         */
         Object.keys(list).map((address) => {
           const contact = list[address];
-          const firstLetter = contact.first_name.charAt(0).toUpperCase();
+          let firstLetter = contact.first_name.charAt(0).toUpperCase();
+
+          if ('0123456789'.indexOf(firstLetter) !== -1) {
+            firstLetter = '#';
+          }
+
+          contact.firstLetter = firstLetter;
 
           if (!contacts.list[firstLetter]) {
             contacts.list[firstLetter] = [];
@@ -61,6 +60,9 @@
           return true;
         });
 
+        /**
+         * Sort contacts in alphabetical order
+         */
         Object.keys(contacts.list).map((letter) => {
           contacts.list[letter] = contacts.list[letter].sort((a, b) => {
             const nameA = a.first_name.toUpperCase();

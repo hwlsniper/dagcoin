@@ -2,14 +2,14 @@
   'use strict';
 
   angular.module('copayApp.controllers').controller('wordsController',
-    function ($rootScope, $scope, $timeout, profileService, go, gettextCatalog, confirmDialog, notification, $log, isCordova) {
+    function ($rootScope, $scope, $timeout, profileService, go, gettextCatalog, confirmDialog, notification, $log, Device) {
       const msg = gettextCatalog.getString('Are you sure you want to delete the backup words?');
       const successMsg = gettextCatalog.getString('Backup words deleted');
       const self = this;
       self.show = false;
       const fc = profileService.focusedClient;
 
-      if (isCordova) {
+      if (Device.isCordova()) {
         self.text = gettextCatalog.getString(`To protect your funds, please use multisig wallets with redundancy, 
           e.g. 1-of-2 wallet with one key on this device and another key on your laptop computer. 
           Just the wallet seed is not enough.`);

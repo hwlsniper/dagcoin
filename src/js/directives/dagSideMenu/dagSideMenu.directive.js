@@ -36,8 +36,12 @@
               icon: 'banknote',
               state: 'receive'
             }, {
+              title: 'Address Book',
+              icon: 'import_contacts',
+              state: 'contacts'
+            }, {
               title: 'Chat',
-              icon: 'chat2',
+              icon: 'chat_bubble_outline',
               state: 'correspondentDevices'
             }
           ]

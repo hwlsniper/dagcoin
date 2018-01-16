@@ -18,9 +18,9 @@
      */
     .directive('dagTab', dagTab);
 
-  dagTabset.$inject = ['$rootScope'];
+  dagTabset.$inject = [];
 
-  function dagTabset($rootScope) {
+  function dagTabset() {
     return {
       restrict: 'E',
       transclude: true,
@@ -28,51 +28,34 @@
       templateUrl: 'directives/dagTabs/dagTabs.template.html',
       controllerAs: 'tabset',
       controller($scope, $element) {
-        const self = this;
-        self.tabs = [];
-        self.activeTab = 0;
-        self.slider_width = 50;
+        const vm = this;
+        vm.tabs = [];
+        vm.activeTab = 0;
+        vm.slider_width = 50;
+        vm.onLeave = false;
+        vm.onEnter = false;
 
-        self.addTab = (tab) => {
-          self.tabs.push(tab);
+        vm.addTab = (tab) => {
+          vm.tabs.push(tab);
 
-          if (self.tabs.length === 1) {
+          if (vm.tabs.length === 1) {
             tab.active = true;
           }
 
-          self.slider_width = ($element[0].getElementsByClassName('dag_tabs')[0].clientWidth / self.tabs.length);
+          vm.slider_width = ($element[0].getElementsByClassName('dag_tabs')[0].clientWidth / vm.tabs.length);
         };
 
-        function moveSlide(index) {
-          if (!$rootScope.no_animation) {
-            TweenMax.to($element[0].getElementsByClassName('dag_tabs_slider')[0], 0.3, {
-              ease: Expo.easeOut,
-              x: (self.slider_width * index)
-            });
-          }
-        }
-
-        self.restoreSlide = () => {
-          moveSlide(self.activeTab);
-        };
-
-        self.moveSlide = (index) => {
-          moveSlide(index);
-        };
-
-        self.select = (selectedTab, index) => {
-          if (self.activeTab === index) {
+        vm.select = (selectedTab, index) => {
+          if (vm.activeTab === index) {
             return false;
           }
 
-          self.tabs = self.tabs.map((tab) => {
+          vm.tabs = vm.tabs.map((tab) => {
             tab.active = false;
             return tab;
           });
 
-          moveSlide(index);
-
-          self.activeTab = index;
+          vm.activeTab = index;
 
           selectedTab.active = true;
 
@@ -93,9 +76,7 @@
       scope: {
         heading: '@',
         tabClick: '&',
-        selected: '=',
-        onLeave: '&',
-        onEnter: '&'
+        selected: '='
       },
       link: ($scope, element, attr, dagtabsetCtrl) => {
         $scope.active = false;

@@ -12,14 +12,14 @@
               go,
               profileService,
               configService,
-              isCordova,
+              Device,
               gettextCatalog,
               isMobile,
               derivationPathHelper,
               correspondentListService) {
       const self = this;
       const defaults = configService.getDefaults();
-      this.isWindowsPhoneApp = isMobile.Windows() && isCordova;
+      this.isWindowsPhoneApp = isMobile.Windows() && Device.isCordova();
       $scope.account = 1;
       $scope.derivationPath = derivationPathHelper.default;
 
