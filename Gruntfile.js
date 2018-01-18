@@ -163,6 +163,9 @@ module.exports = function (grunt) {
           'bower_components/es5-shim/es5-sham.min.js',
           'bower_components/es6-shim/es6-shim.min.js',
           'bower_components/es6-shim/es6-sham.min.js',
+
+          'bower_components/iScroll/build/iscroll.js',
+
           'bower_components/jquery/dist/jquery.min.js',
           'bower_components/fastclick/lib/fastclick.js',
           'bower_components/qrcode-generator/js/qrcode.js',
