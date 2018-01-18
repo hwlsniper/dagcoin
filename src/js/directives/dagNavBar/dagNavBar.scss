@@ -71,7 +71,10 @@
   }
 
   a {
-    color: currentColor
+    color: currentColor;
+    height: 100%;
+    width: 100%;
+    display: block;
   }
 
   &.invert {
