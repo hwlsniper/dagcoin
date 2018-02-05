@@ -5,7 +5,7 @@
   angular.module('copayApp.services')
   .factory('pushNotificationsService', ($http, $rootScope, $log, isMobile, storageService, configService, lodash, isCordova) => {
     const root = {};
-    const usePushNotifications = isCordova && !isMobile.Windows();
+    const usePushNotifications = false; //isCordova && !isMobile.Windows();
     let projectNumber;
     let wsLocal;
 
@@ -44,6 +44,8 @@
     });
 
     root.pushNotificationsInit = function () {
+
+      /*
       if (!usePushNotifications) return;
 
       window.plugins.pushNotification.register(() => {},
@@ -53,6 +55,46 @@
           senderID: projectNumber,
           ecb: 'onNotification',
         });
+      */
+
+      const push = PushNotification.init({
+        android: {
+        },
+        browser: {
+          pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+        },
+        ios: {
+          alert: "true",
+          badge: "true",
+          sound: "true"
+        },
+        windows: {}
+      });
+
+      push.on('registration', (data) => {
+        // data.registrationId
+        console.log(`ReGID:${data.registrationId}`);
+        alert('reg: ' + data.registrationId);
+        return storageService.setPushInfo(projectNumber, data.registrationId, true, () => {
+          sendRequestEnableNotification(wsLocal, data.regid);
+        });
+      });
+
+      push.on('notification', (data) => {
+        // data.message,
+        // data.title,
+        // data.count,
+        // data.sound,
+        // data.image,
+        // data.additionalData
+        alert(`${data}${data.message}`);
+      });
+
+      push.on('error', (e) => {
+        // e.message
+        alert('error' + e);
+      });
+
 
       configService.set({ pushNotifications: { enabled: true } }, (err) => {
         if (err) $log.debug(err);

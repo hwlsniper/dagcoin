@@ -87,10 +87,16 @@ if [ ! -d $PROJECT ]; then
 	if [ $CURRENT_OS == "IOS" ]; then
 		cordova plugin add https://github.com/phonegap/phonegap-plugin-barcodescanner.git
 	else
-		cordova plugin add cordova-plugin-android-support-v4-jar
+	  #commented because android-23 to 26
+		#cordova plugin add cordova-plugin-android-support-v4-jar
+		#checkOK
+		#cordova plugin add https://github.com/jrontend/phonegap-plugin-barcodescanner.git
+		cordova plugin add https://github.com/phonegap/phonegap-plugin-barcodescanner.git
 		checkOK
+		# cordova plugin add phonegap-plugin-barcodescanner@5.0.0
+		#cordova plugin add cordova-plugin-barcodescanner
+		#cordova plugin add cordova-plugin-qrscanner
 
-		cordova plugin add https://github.com/jrontend/phonegap-plugin-barcodescanner.git
 	fi
 	checkOK
 
@@ -154,8 +160,6 @@ if [ ! -d $PROJECT ]; then
 	cordova plugin add https://github.com/phonegap/phonegap-plugin-push
 	checkOK
 
-
-
 	#phonegap local plugin add https://github.com/phonegap-build/PushPlugin.git
 	#checkOK
 
@@ -203,6 +207,15 @@ if [ $CURRENT_OS == "ANDROID" ]; then
 
 	mkdir -p $PROJECT/platforms/android/res/xml/
 	checkOK
+
+  # gcm needs google-services.json. google-services.json is downloaded from firebase web site.
+	cp android/google-services.json $PROJECT/platforms/android/google-services.json
+	checkOK
+
+  # new cordova-android needs colors.xml
+	cp android/colors.xml $PROJECT/platforms/android/res/values
+	checkOK
+
 
 #  cp android/AndroidManifest.xml $PROJECT/platforms/android/AndroidManifest.xml
 #  checkOK

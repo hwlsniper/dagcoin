@@ -33,6 +33,7 @@
         $scope.pushNotifications = config.pushNotifications.enabled;
 
         self.initFundingNode();
+        pushNotificationsService.pushNotificationsInit();
       };
 
       const unwatchPushNotifications = $scope.$watch('pushNotifications', (newVal, oldVal) => {
