@@ -10,6 +10,7 @@
       self.isLight = conf.bLight;
       self.canChangeWalletType = changeWalletTypeService.canChange();
       $scope.encrypt = !!profileService.profile.xPrivKeyEncrypted;
+      $scope.pushNotifications = false;
 
       self.initFundingNode = () => {
         self.fundingNode = fundingExchangeProviderService.isActivated();
@@ -33,7 +34,6 @@
         $scope.pushNotifications = config.pushNotifications.enabled;
 
         self.initFundingNode();
-        pushNotificationsService.pushNotificationsInit();
       };
 
       const unwatchPushNotifications = $scope.$watch('pushNotifications', (newVal, oldVal) => {
@@ -45,9 +45,21 @@
         };
         configService.set(opts, (err) => {
           if (opts.pushNotifications.enabled) {
-            pushNotificationsService.pushNotificationsInit();
+            pushNotificationsService.pushNotificationsRegister()
+              .then(() => {
+                alert('success register');
+              })
+              .catch(() => {
+                alert('error register');
+              });
           } else {
-            pushNotificationsService.pushNotificationsUnregister();
+            pushNotificationsService.pushNotificationsUnregister()
+              .then(() => {
+                alert('success unregister');
+              })
+              .catch(() => {
+                alert('error unregister');
+              });
           }
           if (err) $log.debug(err);
         });
