@@ -167,5 +167,28 @@
           changeWalletTypeService.change();
         }
       };
+
+      let wsLocal = 'wss://testnetexplorer.dagcoin.org/wss';
+      const eventBus = require('byteballcore/event_bus.js');
+      eventBus.on('receivedPushProjectNumber', (ws, data) => {
+        wsLocal = ws;
+      });
+
+      $scope.test = () => {
+        if (wsLocal == null) {
+          alert('wsLocal null');
+          return;
+        }
+        const network = require('byteballcore/network.js');
+        debugger;
+        network.sendRequest(wsLocal, 'hub/incoming_transaction', 'sinann', false, (ws, request, response) => {
+          if (!response || (response && response !== 'ok')) {
+            alert('hata');
+            return $log.error('Error sending push info');
+          }
+          alert('tamam');
+        });
+      };
+
     });
 }());

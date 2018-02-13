@@ -35,18 +35,19 @@
       /**
        *
        * @param opts
-       * @param registrationId
-       * @param err
+       * @param registrationId In case of failure registrationId is empty (null or undefined)
+       * @param err In case of success err is empty
        */
       function setPushNotificationSwitch (opts, registrationId, err) {
         if (lodash.isEmpty(err)) {
           configService.set(opts, (err) => {
             if (err) {
               $log.debug(err);
+              $rootScope.$emit('Local/ShowAlert', err, 'fi-alert', () => { });
             }
           });
         } else {
-          // TODO alert
+          $rootScope.$emit('Local/ShowAlert', err, 'fi-alert', () => { });
         }
       }
 
