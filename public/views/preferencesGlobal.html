@@ -20,7 +20,8 @@
       <div class="description" translate>Backup your wallets and configure restrictions.</div>
     </li>
 
-    <li ui-sref="notifications" dag-left-icon="notifications" dag-right-icon="chevron-thin-right">
+    <li ui-sref="notifications" dag-left-icon="notifications" dag-right-icon="chevron-thin-right"
+        ng-if="pushIsAvailableOnSystem">
       <div translate>Notifications</div>
       <div class="description" translate>Enable/Disable notifications</div>
     </li>

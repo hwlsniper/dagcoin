@@ -1684,12 +1684,14 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
           });
         });
 
+        /*
         $rootScope.$on('Local/pushNotificationsReady', () => {
           self.usePushNotifications = true;
           $timeout(() => {
             $rootScope.$apply();
           });
         });
+        */
 
         if (autoRefreshClientService) {
           autoRefreshClientService.initHistoryAutoRefresh();

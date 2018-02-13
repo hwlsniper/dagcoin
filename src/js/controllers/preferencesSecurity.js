@@ -36,35 +36,6 @@
         self.initFundingNode();
       };
 
-      const unwatchPushNotifications = $scope.$watch('pushNotifications', (newVal, oldVal) => {
-        if (newVal === oldVal) return;
-        const opts = {
-          pushNotifications: {
-            enabled: newVal,
-          },
-        };
-        configService.set(opts, (err) => {
-          if (opts.pushNotifications.enabled) {
-            pushNotificationsService.pushNotificationsRegister()
-              .then(() => {
-                alert('success register');
-              })
-              .catch(() => {
-                alert('error register');
-              });
-          } else {
-            pushNotificationsService.pushNotificationsUnregister()
-              .then(() => {
-                alert('success unregister');
-              })
-              .catch(() => {
-                alert('error unregister');
-              });
-          }
-          if (err) $log.debug(err);
-        });
-      });
-
       function lock() {
         $rootScope.$emit('Local/NeedsPassword', true, null, (err, password) => {
           if (err && !password) {
@@ -153,7 +124,6 @@
       };
 
       $scope.$on('$destroy', () => {
-        unwatchPushNotifications();
         unwatchEncrypt();
         unwatchFundingNode();
       });
