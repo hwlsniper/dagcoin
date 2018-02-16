@@ -425,7 +425,16 @@
             },
           },
         })
-
+        .state('notifications', {
+          url: '/notifications',
+          walletShouldBeComplete: true,
+          needProfile: true,
+          views: {
+            main: {
+              templateUrl: 'views/preferencesNotifications.html',
+            },
+          },
+        })
         .state('about', {
           url: '/about',
           walletShouldBeComplete: true,

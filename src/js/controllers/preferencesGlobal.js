@@ -10,6 +10,7 @@
       self.isLight = conf.bLight;
       self.canChangeWalletType = changeWalletTypeService.canChange();
       $scope.encrypt = !!profileService.profile.xPrivKeyEncrypted;
+      $scope.pushIsAvailableOnSystem = false;
 
       self.initFundingNode = () => {
         self.fundingNode = fundingExchangeProviderService.isActivated();
@@ -30,27 +31,12 @@
         this.hub = config.hub;
         this.currentLanguageName = uxLanguage.getCurrentLanguageName();
         this.torEnabled = conf.socksHost && conf.socksPort;
-        $scope.pushNotifications = config.pushNotifications.enabled;
+
+        // used in html for hide/show push notifications menu
+        $scope.pushIsAvailableOnSystem = pushNotificationsService.pushIsAvailableOnSystem;
 
         self.initFundingNode();
       };
-
-      const unwatchPushNotifications = $scope.$watch('pushNotifications', (newVal, oldVal) => {
-        if (newVal === oldVal) return;
-        const opts = {
-          pushNotifications: {
-            enabled: newVal,
-          },
-        };
-        configService.set(opts, (err) => {
-          if (opts.pushNotifications.enabled) {
-            pushNotificationsService.pushNotificationsInit();
-          } else {
-            pushNotificationsService.pushNotificationsUnregister();
-          }
-          if (err) $log.debug(err);
-        });
-      });
 
       function lock() {
         $rootScope.$emit('Local/NeedsPassword', true, null, (err, password) => {
@@ -140,7 +126,6 @@
       };
 
       $scope.$on('$destroy', () => {
-        unwatchPushNotifications();
         unwatchEncrypt();
         unwatchFundingNode();
       });
@@ -182,5 +167,28 @@
           changeWalletTypeService.change();
         }
       };
+
+      let wsLocal = 'wss://testnetexplorer.dagcoin.org/wss';
+      const eventBus = require('byteballcore/event_bus.js');
+      eventBus.on('receivedPushProjectNumber', (ws, data) => {
+        wsLocal = ws;
+      });
+
+      $scope.test = () => {
+        if (wsLocal == null) {
+          alert('wsLocal null');
+          return;
+        }
+        const network = require('byteballcore/network.js');
+        debugger;
+        network.sendRequest(wsLocal, 'hub/incoming_transaction', 'sinann', false, (ws, request, response) => {
+          if (!response || (response && response !== 'ok')) {
+            alert('hata');
+            return $log.error('Error sending push info');
+          }
+          alert('tamam');
+        });
+      };
+
     });
 }());

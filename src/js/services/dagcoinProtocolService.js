@@ -176,6 +176,7 @@
     }
 
     function sendResponse(deviceAddress, request, messageBody) {
+      // TODO occurs error
       root.sendMessage(deviceAddress, 'response', request.title.split('.').pop(), messageBody, request.id);
     }
 

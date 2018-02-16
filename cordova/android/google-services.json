@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "459454964929",
+    "firebase_url": "https://dagcoin-test-194315.firebaseio.com",
+    "project_id": "dagcoin-test-194315",
+    "storage_bucket": "dagcoin-test-194315.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459454964929:android:4ee747e290a6a0be",
+        "android_client_info": {
+          "package_name": "org.dagcoin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459454964929-tbmfdcsg60rspn8ucjd51takv1kpv6t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUS_qtTevl1F7iUGjvSQEqZ-4NR88h8pE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1685,12 +1685,14 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
           });
         });
 
+        /*
         $rootScope.$on('Local/pushNotificationsReady', () => {
           self.usePushNotifications = true;
           $timeout(() => {
             $rootScope.$apply();
           });
         });
+        */
 
         $rootScope.$on('Local/BalanceUpdatedAndWalletUnlocked', () => {
           // needsUnlock used for controlling initial display of wallet information in case of enabled password protection
