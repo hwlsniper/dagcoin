@@ -10,13 +10,13 @@
         $scope.pushNotifications = pushNotificationsService.pushIsAvailableOnSystem && config.pushNotifications.enabledNew;
       };
 
-      const unwatchPushNotifications  = $scope.$watch('pushNotifications', watchPushNotifications);
+      const unwatchPushNotifications = $scope.$watch('pushNotifications', watchPushNotifications);
 
       $scope.$on('$destroy', () => {
         unwatchPushNotifications();
       });
 
-      function watchPushNotifications (newVal, oldVal) {
+      function watchPushNotifications(newVal, oldVal) {
         if (newVal === oldVal) {
           return;
         }
@@ -38,16 +38,16 @@
        * @param registrationId In case of failure registrationId is empty (null or undefined)
        * @param err In case of success err is empty
        */
-      function setPushNotificationSwitch (opts, registrationId, err) {
+      function setPushNotificationSwitch(opts, registrationId, err) {
         if (lodash.isEmpty(err)) {
-          configService.set(opts, (err) => {
-            if (err) {
-              $log.debug(err);
-              $rootScope.$emit('Local/ShowAlert', err, 'fi-alert', () => { });
+          configService.set(opts, (errInSet) => {
+            if (errInSet) {
+              $log.debug(errInSet);
+              $rootScope.$emit('Local/ShowAlert', errInSet, 'fi-alert', () => { });
             } else {
               $rootScope.$emit('Local/ShowAlert',
-                opts.pushNotifications.enabled ?
-                  gettextCatalog.getString('Push Notifications enabled.'):
+                opts.pushNotifications.enabledNew ?
+                  gettextCatalog.getString('Push Notifications enabled.') :
                   gettextCatalog.getString('Push Notifications disabled.'),
                 'fi-alert', () => { });
             }
@@ -56,6 +56,5 @@
           $rootScope.$emit('Local/ShowAlert', err, 'fi-alert', () => { });
         }
       }
-
     });
 }());

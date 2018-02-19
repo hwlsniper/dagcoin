@@ -14,18 +14,6 @@
     const eventBus = require('byteballcore/event_bus.js');
     const pushNotificationWrapper = new PushNotificationWrapper(usePushNotifications);
 
-    /*
-    window.onNotification = function (data) {
-      alert('push');
-      if (data.event === 'registered') {
-        return storageService.setPushInfo(projectNumber, data.regid, true, () => {
-          sendRequestEnableNotification(wsLocal, data.regid);
-        });
-      }
-      return false;
-    };
-    */
-
     eventBus.on('receivedPushProjectNumber', (ws, data) => {
       console.log(`receivedPushProjectNumber: ${data.projectNumber}`);
       wsLocal = ws;
@@ -40,20 +28,6 @@
         });
       }
     });
-
-    /*
-    root.pushNotificationsInit = function () {
-      if (!usePushNotifications) return;
-
-      window.plugins.pushNotification.register(() => {},
-        (e) => {
-          alert(`err= ${e}`);
-        }, {
-          senderID: projectNumber,
-          ecb: 'onNotification',
-        });
-    };
-    */
 
     root.pushNotificationsUnregister = function (cb) {
       pushNotificationWrapper.unregister(cb);
@@ -116,7 +90,7 @@
             console.log(`Push Notification Error: ${e.message}`);
           });
         } else {
-          console.log('Push notifications are not available on system')
+          console.log('Push notifications are not available on system');
         }
       };
 

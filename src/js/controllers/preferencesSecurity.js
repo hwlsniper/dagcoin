@@ -33,7 +33,6 @@
         this.touchidAvailable = fingerprintService.isAvailable();
         config.touchIdFor = config.touchIdFor || {};
         $scope.touchid = !!config.touchIdFor[profileService.focusedClient.credentials.walletId];
-        $scope.pushNotifications = config.pushNotifications.enabled;
         self.initFundingNode();
       };
 

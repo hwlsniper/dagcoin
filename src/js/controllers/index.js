@@ -57,8 +57,7 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         self.updatingTxHistory = true;
         self.bSwipeSuspended = false;
         self.$state = $state;
-        // self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
-        self.usePushNotifications = false;
+        self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
 
         constants.DAG_FEE = 500; // TODO: this is the transaction fee in micro dagcoins 1000 = 0.001 dagcoins
         constants.MIN_BYTE_FEE = 950;

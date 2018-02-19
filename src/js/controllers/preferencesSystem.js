@@ -30,7 +30,6 @@
         this.hub = config.hub;
         this.currentLanguageName = uxLanguage.getCurrentLanguageName();
         this.torEnabled = conf.socksHost && conf.socksPort;
-        $scope.pushNotifications = config.pushNotifications.enabled;
 
         self.initFundingNode();
       };
