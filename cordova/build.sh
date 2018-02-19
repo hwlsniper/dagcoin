@@ -4,6 +4,9 @@
 # sh ./build.sh --android --reload
 #
 #
+Green='\033[0;32m'
+Red='\033[0;31m'
+CloseColor='\033[0m'
 # Check function OK
 checkOK() {
 	if [ $? != 0 ]; then
@@ -12,11 +15,25 @@ checkOK() {
 	fi
 }
 
+# Check cordova vesion, in order to run push notification on android, cordova version must be 7.1.0
+checkCordovaVersion() {
+  if [ $CURRENT_OS == "ANDROID" ]; then
+    CordovaVersion=$(cordova -v)
+    if [ $CordovaVersion != "7.1.0" ]; then
+      echo -e "${Red}ERROR Cordova version must be 7.1.0 ${CloseColor}"
+      exit 1
+    fi
+  fi
+  echo -e "${Green}OK Cordova Version: ${CordovaVersion}${CloseColor}"
+}
+
 # Configs
 BUILDDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT="$BUILDDIR/../../byteballbuilds/project-$1"
 
 CURRENT_OS=$1
+
+checkCordovaVersion
 
 if [ -z "CURRENT_OS" ]
 then
@@ -62,7 +79,7 @@ if [ ! -d $PROJECT ]; then
 	cd $PROJECT
 
 	if [ $CURRENT_OS == "ANDROID" ]; then
-		echo "${OpenColor}${Green}* Adding Android platform... ${CloseColor}"
+		echo -e "${OpenColor}${Green}* Adding Android platform... ${CloseColor}"
 		cordova platforms add android
 		checkOK
 	fi

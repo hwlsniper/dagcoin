@@ -7,7 +7,12 @@
   .factory('pushNotificationsService', ($http, $rootScope, $log, isMobile, storageService, lodash, isCordova) => {
     const root = {};
     const usePushNotifications = isCordova && !isMobile.Windows();
-    root.pushIsAvailableOnSystem = usePushNotifications;
+    const constants = require('byteballcore/constants.js');
+    const isProduction = !constants.version.match(/t$/);
+
+    // For now if system is in product push notifications disabled.
+    // After product hub is established remove !isProduction control.
+    root.pushIsAvailableOnSystem = usePushNotifications && !isProduction;
     let projectNumber;
     let wsLocal;
 
