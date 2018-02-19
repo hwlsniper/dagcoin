@@ -2,12 +2,12 @@
   'use strict';
 
   angular.module('copayApp.controllers').controller('preferencesNotificationsController',
-    function ($scope, $q, $rootScope, $log, $modal, configService, uxLanguage, pushNotificationsService, lodash) {
+    function ($scope, $q, $rootScope, $log, $modal, configService, uxLanguage, pushNotificationsService, lodash, gettextCatalog) {
       $scope.pushNotifications = false;
 
       this.init = function () {
         const config = configService.getSync();
-        $scope.pushNotifications = pushNotificationsService.pushIsAvailableOnSystem && config.pushNotifications.enabled;
+        $scope.pushNotifications = pushNotificationsService.pushIsAvailableOnSystem && config.pushNotifications.enabledNew;
       };
 
       const unwatchPushNotifications  = $scope.$watch('pushNotifications', watchPushNotifications);
@@ -20,7 +20,7 @@
         if (newVal === oldVal) {
           return;
         }
-        const opts = { pushNotifications: { enabled: newVal } };
+        const opts = { pushNotifications: { enabledNew: newVal } };
         if (newVal) {
           pushNotificationsService.pushNotificationsRegister((registrationId, err) => {
             setPushNotificationSwitch(opts, registrationId, err);
@@ -44,6 +44,12 @@
             if (err) {
               $log.debug(err);
               $rootScope.$emit('Local/ShowAlert', err, 'fi-alert', () => { });
+            } else {
+              $rootScope.$emit('Local/ShowAlert',
+                opts.pushNotifications.enabled ?
+                  gettextCatalog.getString('Push Notifications enabled.'):
+                  gettextCatalog.getString('Push Notifications disabled.'),
+                'fi-alert', () => { });
             }
           });
         } else {

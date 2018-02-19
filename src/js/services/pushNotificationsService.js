@@ -100,6 +100,10 @@
             // data members: registrationId
             console.log(`Push Notification RegId: ${data.registrationId}`);
             storageService.setPushInfo(projectNumber, data.registrationId, true, () => {
+              if (lodash.isEmpty(wsLocal) && cb) {
+                cb(null, 'ws can not be retrieved yet');
+                return;
+              }
               sendRequestEnableNotification(wsLocal, data.registrationId, cb);
             });
           });
@@ -137,8 +141,8 @@
      * @param cb Callback function gets registrationId as first parameter, second is err [string]
      */
     function sendRequestEnableNotification(ws, registrationId, cb) {
-      const network = require('byteballcore/network.js');
       const cbForSendRequest = lodash.isFunction(cb) ? cb : () => { };
+      const network = require('byteballcore/network.js');
       network.sendRequest(ws, 'hub/enable_notification', registrationId, false, (ws, request, response) => {
         if (!response || (response && response !== 'ok')) {
           cbForSendRequest(null, 'Error sending push info');
@@ -154,9 +158,13 @@
      */
     function disableNotification(cb) {
       const cbForSendRequest = lodash.isFunction(cb) ? cb : () => { };
+      if (lodash.isEmpty(wsLocal)) {
+        cbForSendRequest(null, 'ws can not be retrieved yet');
+        return;
+      }
       storageService.getPushInfo((err, pushInfo) => {
         if (!pushInfo || !pushInfo.registrationId) {
-          const err = 'pushInfo unregister problem :: pushInfo or pushInfo.registrationId is undefined or null';
+          const err = 'pushInfo unregister problem :: pushInfo or pushInfo.registrationId is undefined or null. Please try later.';
           cbForSendRequest(null, err);
           console.error(err);
           return;

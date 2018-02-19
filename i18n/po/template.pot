@@ -1857,3 +1857,19 @@ msgstr ""
 #: edit_contact.template.html:36
 msgid "Field is too long"
 msgstr ""
+
+#: preferencesGlobal.html:26
+msgid "Configure notifications"
+msgstr ""
+
+#: preferencesNotifications.html:7
+msgid "Enable push notifications"
+msgstr ""
+
+#: preferencesNotifications.js:50
+msgid "Push notifications enabled"
+msgstr ""
+
+#: preferencesNotifications.js:51
+msgid "Push notifications disabled"
+msgstr ""
