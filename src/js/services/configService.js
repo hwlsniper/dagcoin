@@ -61,6 +61,7 @@
 
       pushNotifications: {
         enabled: true,
+        enabledNew: true, // this is used because existing androids' enabled property is set false initially
         config: {
           android: {
             icon: 'push',
