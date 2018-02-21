@@ -233,12 +233,14 @@
   .directive('validateAmountCharacters', () => ({
       restrict: 'A',
       link(scope, element) {
-        element.on('keydown', (event) => {
-            if (',-+'.indexOf(event.key) !== -1) {
-              event.preventDefault();
-              return false;
-            }
-        });
+        function validateChars(event) {
+          if (',-+eE'.indexOf(event.key) !== -1) {
+            event.preventDefault();
+            return false;
+          }
+        }
+        element.on('keypress', (event) => { validateChars(event); });
+        element.on('keydown', (event) => { validateChars(event); });
       }
   }))
   .directive('normalizeAmount', ['utilityService', function (utilityService) {
