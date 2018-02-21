@@ -230,6 +230,17 @@
     replace: true,
     templateUrl: 'views/includes/available-balance.html',
   }))
+  .directive('validateAmountCharacters', () => ({
+      restrict: 'A',
+      link: function (scope, element, attrs, ctrl) {
+        element.on('keydown', function (event) {
+            if (',-+'.indexOf(event.key) !== -1) {
+              event.preventDefault();
+              return false;
+            }
+        });
+      }
+  }))
   .directive('normalizeAmount', ['utilityService', function (utilityService) {
     return {
       require: 'ngModel',
