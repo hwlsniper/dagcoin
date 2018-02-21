@@ -232,8 +232,8 @@
   }))
   .directive('validateAmountCharacters', () => ({
       restrict: 'A',
-      link: function (scope, element, attrs, ctrl) {
-        element.on('keydown', function (event) {
+      link(scope, element) {
+        element.on('keydown', (event) => {
             if (',-+'.indexOf(event.key) !== -1) {
               event.preventDefault();
               return false;
