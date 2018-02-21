@@ -39,24 +39,16 @@
   <div ng-show="!amountInSmallestUnits" class="row m20t">
     <div class="large-12 large-centered columns">
       <form name="amountForm" ng-submit="submitForm(amountForm)" novalidate>
-        <div class="right" ng-hide="amountForm.amount.$pristine && !amountForm.amount.$modelValue ">
-          <span class="has-error right size-12" ng-if="amountForm.amount.$invalid">
-            <i class="icon-close-circle size-14"></i>
-            <span clas="vm" translate>Not valid</span>
-          </span>
-          <small class="text-primary right" ng-if="!amountForm.amount.$invalid">
-            <i class="icon-checkmark-circle size-14"></i>
-          </small>
-        </div>
-        <div>
-          <label for="amount">
-            <span translate>Amount</span>
-          </label>
-          <div class="input input-wrap">
-            <input type="number" id="amount" name="amount" ng-attr-placeholder="{{'Amount'|translate}}"
+        <div class="form-group">
+          <div class="input-wrap input-icon">
+            <input type="number" id="amount" name="amount"
+            ng-class="{'error': amountForm.amount.$invalid && !amountForm.amount.$error.required, 'success': !amountForm.amount.$invalid}"
+            ng-attr-placeholder="{{'Amount'|translate}}"
             ng-model="_customAmount" valid-amount="{{dagAsset}}" required autocomplete="off"
             min="0.000001" ng-minlength="1" ng-maxlength="16" normalize-amount>
-            <a class="postfix">{{dagUnitName}}</a>
+            <svg class="icon icon-d">
+              <use xlink:href="img/svg/symbol-defs.svg#icon-d"></use>
+            </svg>
           </div>
         </div>
         <button type="submit" class="btn btn_red-full" ng-disabled="amountForm.$invalid" translate>

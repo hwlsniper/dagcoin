@@ -1,10 +1,12 @@
-<div class="backup" ng-if="index.needsBackup" ng-click="index.openBackupNeededModal()">
+<div class="backup" ng-if="(!index.needsUnlock || index.needsUnlock.success === true) && index.needsBackup"
+     ng-click="index.openBackupNeededModal()">
   <span translate>Wallet seed not backed up</span>
 </div>
 
-<dag-nav-bar title="{{index.alias ? index.alias : index.walletName}}">
+<dag-nav-bar title="{{index.alias ? index.alias : index.walletName}}" ng-show="!index.needsUnlock || index.needsUnlock.success === true">
   <qr-scanner ng-if="tab === 'send' && index.isComplete"
-              on-scan="index.onQrCodeScanned(data)">
+              on-scan="index.onQrCodeScanned(data)"
+              title="{{ 'Scan address' | translate }}">
   </qr-scanner>
   <a id="address-share" ng-if="index.isCordova && tab === 'receive' && index.isComplete"
      ng-click="home.shareAddress(home.addr[index.walletId])">
@@ -69,11 +71,15 @@
                     <use xlink:href="img/svg/symbol-defs.svg#icon-d"></use>
                   </svg>
                   <div class="price_digits">
-                    <div class="price_digits_wrapper">
-                                            <span class="price-number"
-                                                  ng-style="home.getFontSizeForWalletNumber(index.dagBalance.totalStr)">{{index.dagBalance.totalStr.split('.')[0]}}</span><span class="price-separator">.</span>
+                    <div class="price_digits_wrapper" ng-if="!index.needsUnlock || index.needsUnlock.success === true">
+                      <span class="price-number"
+                            ng-style="home.getFontSizeForWalletNumber(index.dagBalance.totalStr)">
+                        {{index.dagBalance.totalStr.split('.')[0]}}</span><span class="price-separator">.
+                      </span>
                       <span class="price-sup"
-                            ng-style="home.getFontSizeForWalletNumber(index.dagBalance.totalStr, 'sup')">{{index.dagBalance.totalStr.split('.')[1]}}</span>
+                            ng-style="home.getFontSizeForWalletNumber(index.dagBalance.totalStr, 'sup')">
+                        {{index.dagBalance.totalStr.split('.')[1]}}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -130,7 +136,8 @@
           <span translate>No transactions yet</span>
         </div>
 
-        <div class="dag_transactions" ng-show="index.txHistory[0] && !index.updatingTxHistory">
+        <div class="dag_transactions" ng-show="index.txHistory[0] && !index.updatingTxHistory"
+             ng-if="!index.needsUnlock || index.needsUnlock.success === true">
           <div class="dag_transactions_list">
             <div class="dag_transactions_list_triggers">
               <h4 translate>Transactions History</h4>

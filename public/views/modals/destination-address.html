@@ -1,11 +1,7 @@
 <div class="modal-content fix-modals-touch">
   <nav class="tab-bar">
-    <section class="left-small">
-      <a ng-click="cancel()" class="p10">
-        <span class="text-close" translate>Close</span>
-      </a>
-    </section>
-    <section class="text-center tab-bar-section right" ng-show="bAllowAddressbook">
+
+    <section class="text-center tab-bar-section left" ng-show="bAllowAddressbook">
       <ul class="button-group round even-2" ng-if="isMultiWallet">
         <li class="ellipsis" ng-class="{'selected':selectedWalletsOpt}" ng-click="setWalletsOpt()"
             translate>
@@ -19,6 +15,11 @@
       <h1 ng-if="!isMultiWallet" class="title ellipsis" translate>
         Address book
       </h1>
+    </section>
+    <section class="right-small close-icon-width">
+      <a ng-click="cancel()" class="p10">
+        <svg-icon title="close"></svg-icon>
+      </a>
     </section>
   </nav>
 

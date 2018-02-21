@@ -28,8 +28,8 @@
 
       <div class="input-wrap">
         <label for="description">{{ 'Description' | translate}}</label>
-        <textarea name="description" id="description" ng-model="contact.description"
-                  cols="30" rows="4" ng-maxlength="contact.maxLengthOfContact"
+        <textarea name="description" id="description" ng-model="contact.data.description"
+                  cols="30" rows="4" ng-maxlength="contact.maxLengthOfDescription"
                   ng-class="{'shake error' : editContact.description.$touched && editContact.description.$invalid}">
         </textarea>
         <div class="has-error" ng-show="editContact.description.$touched && editContact.description.$invalid" translate>

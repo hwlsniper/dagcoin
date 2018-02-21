@@ -32,7 +32,7 @@
                  ng-blur="visitedEmail = true"
                  ng-focus="visitedEmail = false"
                  ng-class="{'shake error' : newContact.email.$touched && newContact.email.$invalid && visitedEmail}"
-                 ng-model="contact.email" name="email">
+                 ng-model="contact.data.email" name="email">
           <div class="has-error" ng-show="newContact.email.$touched && newContact.email.$invalid" translate>E-mail not valid</div>
         </div>
         <div class="input-wrap">

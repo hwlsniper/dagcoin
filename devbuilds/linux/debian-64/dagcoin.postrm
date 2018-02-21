@@ -1,0 +1,5 @@
+rm -f /usr/share/applications/dagcoin@type.desktop
+for user in /home/*
+do
+    rm -rf ${user}//Desktop/dagcoin@type.desktop
+done

@@ -239,9 +239,15 @@
           if (inputValue === undefined || inputValue === null) {
             return '';
           }
+
+          // when amount is set by javascript (not by user action in form, set by barcode scan), element.val() returns ''
+          // So that, below comparison is made
+          let rawValue = element.val();
+          rawValue = rawValue && rawValue !== '' ? rawValue : `${inputValue}`;
+
           const attrMaxLength = attrs['ng-maxlength'];
           const maxLength = attrMaxLength ? parseInt(attrMaxLength, 10) : 16;
-          normalized = utilityService.normalizeAmount(element.val()).substring(0, maxLength);
+          normalized = utilityService.normalizeAmount(rawValue).substring(0, maxLength);
           if (normalized !== inputValue) {
             if (normalized.indexOf('.') >= 0) {
               normalized = normalized.substring(0, normalized.indexOf('.') + 7);

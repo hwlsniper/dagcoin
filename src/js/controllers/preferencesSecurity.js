@@ -11,7 +11,6 @@
       self.isLight = conf.bLight;
       self.canChangeWalletType = changeWalletTypeService.canChange();
       $scope.encrypt = !!profileService.profile.xPrivKeyEncrypted;
-
       self.initFundingNode = () => {
         self.fundingNode = fundingExchangeProviderService.isActivated();
         self.fundingNodeSettings = fundingExchangeProviderService.getSettings();
@@ -32,6 +31,8 @@
         this.currentLanguageName = uxLanguage.getCurrentLanguageName();
         this.torEnabled = conf.socksHost && conf.socksPort;
         this.touchidAvailable = fingerprintService.isAvailable();
+        config.touchIdFor = config.touchIdFor || {};
+        $scope.touchid = !!config.touchIdFor[profileService.focusedClient.credentials.walletId];
         $scope.pushNotifications = config.pushNotifications.enabled;
         self.initFundingNode();
       };

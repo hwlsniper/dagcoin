@@ -409,7 +409,7 @@ module.exports = function (grunt) {
     browserify: {
       dist: {
         options: {
-          transform: [['babelify', { presets: ['es2015'] }]],
+          transform: [['babelify', { presets: ['es2015'], compact: false }]],
           exclude: ['sqlite3', 'nw.gui', 'mysql', 'ws', 'regedit', 'fsevents']
         },
         src: 'public/dagcoin.js',

@@ -1,0 +1,16 @@
+Version: @version
+Source: dagcoin@type
+Section: finance
+Priority: optional
+Maintainer: Dagcoin <support@dagcoin.org>
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.7
+Homepage: https://dagcoin.org
+#Vcs-Git: git://anonscm.debian.org/collab-maint/foo.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/foo.git
+
+Package: dagcoin@type
+Architecture: all
+Depends: ${misc:Depends}
+Description: A wallet for decentralized value
+

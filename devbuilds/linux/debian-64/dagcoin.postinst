@@ -1,0 +1,7 @@
+#!/bin/sh
+cp /usr/share/Dagcoin@type/dagcoin@type.desktop /usr/share/applications/dagcoin@type.desktop
+for user in /home/*
+do
+    cp /usr/share/applications/dagcoin@type.desktop ${user}/Desktop/dagcoin@type.desktop
+    chmod +x ${user}//Desktop/dagcoin@type.desktop
+done

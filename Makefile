@@ -27,6 +27,14 @@ prepare-package:
 prepare-package-tn:
 	$(SHELLCMD) devbuilds/prepare-package.sh testnet
 
+# prepares .deb package for live
+prepare-package-deb:
+	$(SHELLCMD) devbuilds/prepare-package-deb.sh live
+
+# prepares .deb package for testnet
+prepare-package-deb-tn:
+	$(SHELLCMD) devbuilds/prepare-package-deb.sh testnet
+
 ios-prod:
 	cordova/build.sh IOS dagcoin --clear live
 	cd ../byteballbuilds/project-IOS && cordova build ios

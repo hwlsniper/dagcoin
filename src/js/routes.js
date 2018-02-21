@@ -677,7 +677,7 @@
         }
       }
 
-      $rootScope.$on('$stateChangeStart', (event, toState, toParams, fromState) => {
+      $rootScope.$on('$stateChangeStart', (event, toState, toParams) => {
         backButton.menuOpened = false;
         go.swipe();
         if (!profileService.profile && toState.needProfile) {
@@ -709,14 +709,6 @@
         ) {
           $state.transitionTo('copayers');
           event.preventDefault();
-        }
-
-        if (!animationService.transitionAnimated(fromState, toState)) {
-          event.preventDefault();
-          // Time for the backpane to render
-          setTimeout(() => {
-            $state.go(toState);
-          }, 50);
         }
       });
     });
