@@ -5,12 +5,6 @@
 </dag-nav-bar>
 
 <div class="content contacts" ng-class="{'no_contacts' : !contacts.listTotal}">
-  <div ng-if="!contacts.listTotal" class="no_contacts_message">
-    <svg-icon name="agenda"></svg-icon>
-    <p translate>Currently you don't have any contacts in your address book.</p>
-    <p translate>Press "+" in the right upper corner to add your first contact.</p>
-  </div>
-
   <div class="swiper_tabs_menu" ng-if="contacts.listTotal">
     <ul>
       <li ng-class="{'active': contacts.activeTab(0)}" ng-click="contacts.swiper.slideTo(0)">
@@ -22,13 +16,25 @@
     </ul>
   </div>
 
+  <div class="input-wrap input-icon search-container">
+    <input type="text" ng-model="contacts.search" id="search" name="search" ng-attr-placeholder="{{'Search' | translate}}">
+    <a>
+      <i class="icon icon-d fi-magnifying-glass"></i>
+    </a>
+  </div>
+
+  <div ng-if="!contacts.listTotal" class="no_contacts_message">
+    <svg-icon name="agenda"></svg-icon>
+    <p translate>Search result is empty or you don't have any contacts in your address book.</p>
+    <p translate>Press "+" in the right upper corner to add new contact.</p>
+  </div>
+
   <ks-swiper-container ng-if="contacts.listTotal" pagination-is-active="false"
                        swiper="swiper"
                        on-ready="contacts.onReadySwiper(swiper)"
                        override-parameters="{'slidesPerView': 1, 'spaceBetween': 0, 'centeredSlides': true}">
 
     <ks-swiper-slide class="swiper-slide">
-
       <div class="contacts_list" ng-scrollbars>
         <div class="contacts_list_group" ng-repeat="(letter, list) in contacts.list">
           <h4 class="contacts_list_letter">{{letter}}</h4>

@@ -5,9 +5,9 @@
     .module('copayApp.controllers')
     .controller('ContactsController', ContactsController);
 
-  ContactsController.$inject = ['addressbookService', '$timeout'];
+  ContactsController.$inject = ['addressbookService', '$timeout', '$scope', 'lodash'];
 
-  function ContactsController(addressbookService, $timeout) {
+  function ContactsController(addressbookService, $timeout, $scope, lodash) {
     const contacts = this;
 
     contacts.toggleFavorite = (contact) => {
@@ -18,12 +18,13 @@
         } else {
           contacts.favoriteListTotal -= 1;
         }
-        loadList();
+        loadList(contacts.search);
       });
     };
 
     contacts.activeTabIndex = 0;
     contacts.swiper = {};
+    contacts.search = '';
 
     contacts.onReadySwiper = (swiper) => {
       contacts.swiper = swiper;
@@ -37,7 +38,7 @@
 
     contacts.activeTab = index => contacts.activeTabIndex === index;
 
-    function loadList() {
+    function loadList(filterValue) {
       contacts.list = {};
       contacts.listTotal = 0;
       contacts.favoriteList = {};
@@ -73,15 +74,23 @@
         Object.keys(list).map((address) => {
           const contact = list[address];
           const firstLetter = contact.first_name.charAt(0).toUpperCase();
+          const firstNameCondition = filterValue && contact.first_name.toUpperCase().indexOf(filterValue.toUpperCase()) !== -1;
+          const lastNameCondition = filterValue && lodash.has(contact, 'last_name') && contact.last_name.toUpperCase().indexOf(filterValue.toUpperCase()) !== -1
 
-          if (!contacts.list[firstLetter]) {
+          if (!contacts.list[firstLetter] && firstLetter) {
             contacts.list[firstLetter] = [];
           }
 
-          contacts.list[firstLetter].push(contact);
-          contacts.listTotal += 1;
+          if (!filterValue || firstNameCondition || lastNameCondition) {
+            contacts.list[firstLetter].push(contact);
+            contacts.listTotal += 1;
+          }
+          
+          if (contacts.list[firstLetter].length <= 0) {
+            contacts.list = lodash.omit(contacts.list, firstLetter);
+          }
 
-          if (contact.favorite) {
+          if (contact.favorite && (!filterValue || firstNameCondition || lastNameCondition)) {
             if (!contacts.favoriteList[firstLetter]) {
               contacts.favoriteList[firstLetter] = [];
             }
@@ -100,6 +109,10 @@
         contacts.favoriteList = hashSort(contacts.favoriteList);
       });
     }
+
+    $scope.$watch('contacts.search', function (value){
+      loadList(value);
+    });
 
     loadList();
   }
