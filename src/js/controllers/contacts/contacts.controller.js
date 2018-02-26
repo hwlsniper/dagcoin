@@ -75,7 +75,7 @@
           const contact = list[address];
           const firstLetter = contact.first_name.charAt(0).toUpperCase();
           const firstNameCondition = filterValue && contact.first_name.toUpperCase().indexOf(filterValue.toUpperCase()) !== -1;
-          const lastNameCondition = filterValue && lodash.has(contact, 'last_name') && contact.last_name.toUpperCase().indexOf(filterValue.toUpperCase()) !== -1
+          const lastNameCondition = filterValue && lodash.has(contact, 'last_name') && contact.last_name.toUpperCase().indexOf(filterValue.toUpperCase()) !== -1;
 
           if (!contacts.list[firstLetter] && firstLetter) {
             contacts.list[firstLetter] = [];
@@ -85,7 +85,7 @@
             contacts.list[firstLetter].push(contact);
             contacts.listTotal += 1;
           }
-          
+
           if (contacts.list[firstLetter].length <= 0) {
             contacts.list = lodash.omit(contacts.list, firstLetter);
           }
@@ -110,7 +110,7 @@
       });
     }
 
-    $scope.$watch('contacts.search', function (value){
+    $scope.$watch('contacts.search', (value) => {
       loadList(value);
     });
 
