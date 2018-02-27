@@ -108,7 +108,7 @@
                 <span class="name" translate>Set up a Password </span>
               </div>
               <div class="input-wrap">
-                <input type="password" placeholder="{{'Your export password'|translate}}"
+                <input class="password" autocomplete="off" type="text" placeholder="{{'Your export password'|translate}}"
                        name="password" ng-model="export.password">
               </div>
             </div>
@@ -117,7 +117,7 @@
                 <span class="name" translate>Repeat the password</span>
               </div>
               <div class="input-wrap">
-                <input type="password" placeholder="{{'Repeat password'|translate}}"
+                <input class="password" autocomplete="off" type="text" placeholder="{{'Repeat password'|translate}}"
                        name="password2" ng-model="export.repeatpassword">
               </div>
             </div>
