@@ -9,6 +9,11 @@
     bottom: 0;
   }
 
+  .search-container {
+    margin: 15px;
+    z-index: 1000001;
+  }
+
   &.no_contacts {
     background: #f1f1f1;
   }
@@ -16,6 +21,7 @@
   .no_contacts_message {
     @extend .slideInDown;
     margin: 30px;
+    margin-top: 40px;
     text-align: center;
     padding: 30px;
     background: #fff;
@@ -95,8 +101,9 @@
   }
 
   .contacts_list {
-    height: 100%;
+    height: 85%;
     position: relative;
+    margin-top: 70px;
 
     .contacts_list_group {
       padding: 20px;

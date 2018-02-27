@@ -3299,3 +3299,8 @@ p.color_red {
   border-radius: 10px;
   border: 1px dashed #ddd;
 }
+
+.password {
+  -webkit-text-security: disc;
+  -moz-text-security: disc;
+}

@@ -74,6 +74,28 @@
           }
         });
 
+        const disableMerchantPaymentRequestListener = $rootScope.$on('merchantPaymentRequest', (event, address, amount, invoiceId, validForSeconds, merchantName) => {
+          console.log(`paymentRequest event ${address}, ${amount}`);
+          $rootScope.$emit('Local/SetTab', 'send');
+          this.invoiceId = invoiceId;
+          this.validForSeconds = Math.floor(validForSeconds - 10); // 10 is a security threshold
+          self.setForm(address, amount, null, ENV.DAGCOIN_ASSET, null);
+
+          const form = $scope.sendForm;
+          if (form.address.$invalid && !self.blockUx) {
+            console.log('invalid address, resetting form');
+            self.resetForm();
+            self.error = gettextCatalog.getString('Could not recognize a valid Dagcoin QR Code');
+          }
+
+          if (this.validForSeconds <= 0) {
+            self.resetForm();
+            self.error = gettextCatalog.getString('Merchant payment request expired');
+          }
+
+          self.countDown();
+        });
+
         const disablePaymentUriListener = $rootScope.$on('paymentUri', (event, uri) => {
           $timeout(() => {
             $rootScope.$emit('Local/SetTab', 'send');
@@ -93,6 +115,7 @@
         const disableResumeListener = $rootScope.$on('Local/Resume', () => {
           // This is needed then the apps go to sleep
           // looks like it already works ok without rebinding touch events after every resume
+          // self.bindTouchDown();
         });
 
         const disableTabListener = $rootScope.$on('Local/TabChanged', (e, tab) => {
@@ -143,6 +166,7 @@
           console.log('walletHome $destroy');
           disableAddrListener();
           disablePaymentRequestListener();
+          disableMerchantPaymentRequestListener();
           disablePaymentUriListener();
           disableTabListener();
           disableFocusListener();
@@ -151,6 +175,10 @@
           $rootScope.hideMenuBar = false;
           eventBus.removeListener('new_wallet_address', onNewWalletAddress);
         });
+
+        // const accept_msg = gettextCatalog.getString('Accept');
+        // const cancel_msg = gettextCatalog.getString('Cancel');
+        // const confirm_msg = gettextCatalog.getString('Confirm');
 
         $scope.formatSum = (sum) => {
           const string = sum.toString().split('.');
@@ -417,6 +445,26 @@
 
           $timeout(() => {
             $scope.tooltipCopiedShown = false;
+          }, 1000);
+        };
+
+        this.countDown = function () {
+          const self = this;
+
+          if (this.validForSeconds == null) {
+            // Form has been reset
+            return;
+          }
+
+          if (this.validForSeconds <= 0) {
+            self.resetForm();
+            self.error = gettextCatalog.getString('Payment request expired');
+            return;
+          }
+
+          $timeout(() => {
+            self.validForSeconds -= 1;
+            self.countDown();
           }, 1000);
         };
 
@@ -688,7 +736,8 @@
           const address = form.address.$modelValue;
           const recipientDeviceAddress = assocDeviceAddressesByPaymentAddress[address];
           let amount = form.amount.$modelValue;
-          const paymentId = form.paymentId ? form.paymentId.$modelValue : null;
+          const invoiceId = this.invoiceId;
+          // const paymentId = 1;
           let merkleProof = '';
           if (form.merkle_proof && form.merkle_proof.$modelValue) {
             merkleProof = form.merkle_proof.$modelValue.trim();
@@ -888,9 +937,9 @@
                 }
 
                 paymentPromise.then(() => new Promise((resolve, reject) => {
-                  if (paymentId != null) {
+                  if (invoiceId != null) {
                     const objectHash = require('byteballcore/object_hash');
-                    const payload = JSON.stringify({ paymentId });
+                    const payload = JSON.stringify({ invoiceId });
                     opts.messages = [{
                       app: 'text',
                       payload_location: 'inline',
@@ -902,7 +951,7 @@
                   console.log(`PAYMENT OPTIONS BEFORE: ${JSON.stringify(opts)}`);
                   useOrIssueNextAddress(fc.credentials.walletId, 0, (addressInfo) => {
                     opts.change_address = addressInfo.address;
-                    fc.sendMultiPayment(opts, (sendMultiPaymentError) => {
+                    fc.sendMultiPayment(opts, (sendMultiPaymentError, unit, assocMnemonics) => {
                       let error = sendMultiPaymentError;
                       // if multisig, it might take very long before the callback is called
                       indexScope.setOngoingProcess(gettextCatalog.getString('sending'), false);
@@ -918,6 +967,32 @@
                         return self.setSendError(error);
                       }
                       const binding = self.binding;
+
+                      if (unit != null && self.invoiceId != null) {
+                        const invoiceId = self.invoiceId;
+                        self.invoiceId = null;
+
+                        const options = {
+                          uri: `${ENV.MERCHANT_INTEGRATION_API}/payment-unit-updated`,
+                          method: 'POST',
+                          json: {
+                            invoiceId,
+                            paymentUnitId: unit
+                          }
+                        };
+
+                        if (invoiceId != null) {
+                          const request = require('request');
+                          request(options, (error, response, body) => {
+                            if (error) {
+                              console.log(`PAYMENT UNIT UPDATE ERROR: ${error}`);
+                            }
+                            console.log(`RESPONSE: ${JSON.stringify(response)}`);
+                            console.log(`BODY: ${JSON.stringify(body)}`);
+                          });
+                        }
+                      }
+
                       self.resetForm();
                       $rootScope.$emit('NewOutgoingTx');
                       if (recipientDeviceAddress) { // show payment in chat window
@@ -1194,6 +1269,29 @@
           this.resetError();
           delete this.binding;
 
+          const invoiceId = this.invoiceId;
+
+          const options = {
+            uri: `${ENV.MERCHANT_INTEGRATION_API}/cancel`,
+            method: 'POST',
+            json: {
+              invoiceId
+            }
+          };
+
+          if (invoiceId != null) {
+            const request = require('request');
+            request(options, (error, response, body) => {
+              if (error) {
+                console.log(`CANCEL ERROR: ${error}`);
+              }
+              console.log(`RESPONSE: ${JSON.stringify(response)}`);
+              console.log(`BODY: ${JSON.stringify(body)}`);
+            });
+          }
+
+          this.invoiceId = null;
+          this.validForSeconds = null;
           this.lockAsset = false;
           this.lockAddress = false;
           this.lockAmount = false;

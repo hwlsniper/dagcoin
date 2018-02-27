@@ -15,7 +15,8 @@
      gettextCatalog,
      authService,
      $deepStateRedirect,
-     $stickyState) => {
+     $stickyState,
+     ENV) => {
       const root = {};
       let removeListener;
       const hideSidebars = function () {
@@ -131,6 +132,60 @@
 
       function handleUri(uri) {
         console.log(`handleUri ${uri}`);
+
+        processMerchantPaymentRequestQrCode(uri).then((wasMerchantPayment) => {
+          if (!wasMerchantPayment) {
+            processGenericPaymentRequestQrCode(uri);
+          }
+        });
+      }
+
+      function processMerchantPaymentRequestQrCode(uri) {
+        console.log('PROCESSING AS MERCANT PAYMENT REQUEST QR');
+
+        if (uri == null || uri.indexOf(':') < 0) {
+          console.log('URI DOESN\'T LOOK LIKE A MERCHANT PAYMENT REQUEST AT ALL');
+          return Promise.resolve(false);
+        }
+
+        const invoiceId = uri.split(':')[1];
+        const uuidV4Regex = /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i;
+
+        if (!uuidV4Regex.test(invoiceId)) {
+          console.log('THE URI CONTENT IS NOT A UUID V4');
+          return Promise.resolve(false);
+        }
+
+        const request = require('request');
+
+        return new Promise((resolve) => {
+          request(`${ENV.MERCHANT_INTEGRATION_API}/${invoiceId}`, (error, response, body) => {
+            try {
+              const payload = JSON.parse(body).payload;
+
+              if (error) {
+                console.log(`error: ${error}`); // Print the error if one occurred
+              }
+              console.log(`body: ${body}`);
+
+              $rootScope.$emit(
+                'merchantPaymentRequest',
+                payload.walletAddress,
+                payload.coinAmount * 1000 * 1000,
+                payload.id,
+                payload.validForSeconds,
+                payload.merchantName
+              );
+            } catch (ex) {
+              console.log(`error: ${ex}`); // Print the error if one occurred
+            }
+
+            resolve(true);
+          });
+        });
+      }
+
+      function processGenericPaymentRequestQrCode(uri) {
         require('byteballcore/uri.js').parseUri(uri, {
           ifError(err) {
             console.log(err);

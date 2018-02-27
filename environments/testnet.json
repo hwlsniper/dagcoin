@@ -9,6 +9,7 @@
     "hub": "testnetexplorer.dagcoin.org/wss/",
     "discoveryServicePairingCode": "AnqLjlEMkQsoP6yZ/vDwT41F3IE6ItfggF0oxyYsUj42@testnetexplorer.dagcoin.org/wss/#0000",
     "protocolPrefix": "dagcoin-tn",
-    "DATABASE_MIGRATION_TOOL": "native-queries"
+    "DATABASE_MIGRATION_TOOL": "native-queries",
+    "MERCHANT_INTEGRATION_API" : "https://test-api.dagpay.io/api/invoices"
   }
 }

@@ -10,11 +10,10 @@
         const device = require('byteballcore/device.js');
         device.setDeviceName(self.deviceName);
         const opts = { deviceName: self.deviceName };
-        configService.set(opts, (err) => {
-          if (err) {
-            self.$emit('Local/DeviceError', err);
-          }
-          self.bDeviceNameSet = true;
+        configService.set(opts, () => {
+          $timeout(() => {
+            self.bDeviceNameSet = true;
+          });
         });
       };
 

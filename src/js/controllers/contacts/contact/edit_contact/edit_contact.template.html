@@ -7,32 +7,34 @@
             <div class="input-wrap">
                 <label class="required" for="first_name">{{ 'First name' | translate}}</label>
                 <input id="first_name" class="animated"
-                       ng-class="{'shake error' : editContact.first_name.$touched && editContact.first_name.$invalid}"
-                       ng-maxlength="20" type="text" ng-model="contact.data.first_name" name="first_name" required>
+                       ng-class="{'shake error' : editContact.first_name.$invalid}"
+                       ng-maxlength="50" type="text" ng-model="contact.data.first_name" name="first_name" required>
             </div>
 
             <div class="input-wrap">
                 <label for="last_name">{{ 'Last name' | translate}}</label>
-                <input id="last_name" type="text" ng-model="contact.data.last_name" name="last_name">
+                <input id="last_name"
+                       ng-class="{'shake error' : editContact.last_name.$invalid}"
+                       ng-maxlength="50" type="text" ng-model="contact.data.last_name" name="last_name">
             </div>
 
             <div class="input-wrap">
                 <label for="email">{{ 'E-mail' | translate}}</label>
                 <input id="email" ng-blur="visitedEmail = true" type="email"
-                       ng-focus="visitedEmail = false"
-                       ng-class="{'shake error' : editContact.email.$touched && editContact.email.$invalid && visitedEmail}"
+                       ng-maxlength="254"
+                       ng-class="{'shake error' : editContact.email.$invalid}"
                        ng-model="contact.data.email" name="email">
               <div class="has-error"
-                   ng-show="editContact.email.$touched && editContact.email.$invalid" translate>E-mail not valid</div>
+                   ng-show="editContact.email.$invalid" translate>E-mail not valid</div>
             </div>
 
       <div class="input-wrap">
         <label for="description">{{ 'Description' | translate}}</label>
         <textarea name="description" id="description" ng-model="contact.data.description"
                   cols="30" rows="4" ng-maxlength="contact.maxLengthOfDescription"
-                  ng-class="{'shake error' : editContact.description.$touched && editContact.description.$invalid}">
+                  ng-class="{'shake error' : editContact.description.$invalid}">
         </textarea>
-        <div class="has-error" ng-show="editContact.description.$touched && editContact.description.$invalid" translate>
+        <div class="has-error" ng-show="editContact.description.$invalid" translate>
           Field is too long
         </div>
       </div>

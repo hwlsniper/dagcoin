@@ -8,7 +8,7 @@
   EditContactController.$inject = ['$stateParams', 'addressbookService', '$state'];
 
   function EditContactController($stateParams, addressbookService, $state) {
-    const MAX_LENGTH_OF_DESCRIPTION = 500;
+    const MAX_LENGTH_OF_DESCRIPTION = 300;
     const contact = this;
     contact.maxLengthOfDescription = MAX_LENGTH_OF_DESCRIPTION;
     const contactData = addressbookService.getContact($stateParams.address) || {};
