@@ -97,6 +97,7 @@
             contacts.favoriteList[firstLetter].push(contact);
             contacts.favoriteListTotal += 1;
           }
+
           return true;
         });
 
@@ -107,6 +108,10 @@
 
         contacts.list = hashSort(contacts.list);
         contacts.favoriteList = hashSort(contacts.favoriteList);
+
+        if (contacts.listTotal <= 0) {
+          contacts.activeTabIndex = 0;
+        }
       });
     }
 
