@@ -3,6 +3,10 @@
 .contact.contact {
   padding: 15px;
 
+  > .mCustomScrollBox {
+    max-height: 100% !important;
+  }
+
   .contact_card {
     background: #fff;
     border-radius: 5px;
