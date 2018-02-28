@@ -4,7 +4,8 @@
   /* eslint-disable no-shadow */
   /* global PushNotification */
   angular.module('copayApp.services')
-  .factory('pushNotificationsService', ($http, $rootScope, $log, isMobile, storageService, lodash, isCordova) => {
+  .factory('pushNotificationsService', ($http, $rootScope, $log, isMobile, storageService, lodash, isCordova,
+                                        configService, $timeout, $state) => {
     const root = {};
     const usePushNotifications = isCordova && !isMobile.Windows();
     const constants = require('byteballcore/constants.js');
@@ -28,7 +29,10 @@
           if (pushInfo && projectNumber === '0') {
             root.pushNotificationsUnregister(() => { });
           } else {
-            pushNotificationWrapper.init();
+            const config = configService.getSync();
+            if (config.pushNotifications.enabledNew) {
+              pushNotificationWrapper.init();
+            }
           }
         });
       }
@@ -54,6 +58,13 @@
       this.available = false;
 
       /**
+       * A push notification coming from hub when application starts. It means that a device emits "peer_sent_new_message"
+       * This property prevents move chat tab at first push notification.
+       */
+      this.first = true;
+
+      /**
+       * If push is disabled by user, this method has no effect.
        * In order to available push notifications available pushIsAvailableOnSystem and PushNotification plugin must
        * exists in application.
        * @param cb Callback function gets registrationId as parameter
@@ -78,17 +89,27 @@
           this.push.on('registration', (data) => {
             // data members: registrationId
             console.log(`Push Notification RegId: ${data.registrationId}`);
-            storageService.setPushInfo(projectNumber, data.registrationId, true, () => {
-              if (lodash.isEmpty(wsLocal) && cb) {
-                cb(null, 'ws can not be retrieved yet');
-                return;
+            storageService.getPushInfo((err, pushInfo) => {
+              if (!pushInfo) {
+                storageService.setPushInfo(projectNumber, data.registrationId, true, () => {
+                  if (lodash.isEmpty(wsLocal) && cb) {
+                    cb(null, 'ws can not be retrieved yet');
+                    return;
+                  }
+                  sendRequestEnableNotification(wsLocal, data.registrationId, cb);
+                });
               }
-              sendRequestEnableNotification(wsLocal, data.registrationId, cb);
             });
           });
           this.push.on('notification', (data) => {
             // data members: message, title, count, sound, image, additionalData
             console.log(`Push Notification Received: ${data.message}`);
+            // If notification type is "msg" open chat tab. type property is coming from hub.
+            if (!this.first && data.additionalData['type'] === 'msg') {
+              $state.go('correspondentDevices');
+              $timeout(() => { $rootScope.$apply(); });
+            }
+            this.first = false;
           });
           this.push.on('error', (e) => {
             // e members: message
