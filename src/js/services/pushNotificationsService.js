@@ -58,12 +58,6 @@
       this.available = false;
 
       /**
-       * A push notification coming from hub when application starts. It means that a device emits "peer_sent_new_message"
-       * This property prevents move chat tab at first push notification.
-       */
-      this.first = true;
-
-      /**
        * If push is disabled by user, this method has no effect.
        * In order to available push notifications available pushIsAvailableOnSystem and PushNotification plugin must
        * exists in application.
@@ -86,32 +80,8 @@
             windows: {}
           });
           console.log('registering push notification');
-          this.push.on('registration', (data) => {
-            // data members: registrationId
-            console.log(`Push Notification RegId: ${data.registrationId}`);
-            storageService.getPushInfo((err, pushInfo) => {
-              if (!pushInfo) {
-                storageService.setPushInfo(projectNumber, data.registrationId, true, () => {
-                  if (lodash.isEmpty(wsLocal) && cb) {
-                    cb(null, 'ws can not be retrieved yet');
-                    return;
-                  }
-                  sendRequestEnableNotification(wsLocal, data.registrationId, cb);
-                });
-              }
-            });
-          });
-          this.push.on('notification', (data) => {
-            // data members: message, title, count, sound, image, additionalData
-            console.log(`Push Notification Received: ${data.message}`);
-
-            // If notification type is "msg" open chat tab. type property is coming from hub.
-            if (!this.first && data.additionalData.type === 'msg') {
-              $state.go('correspondentDevices');
-              $timeout(() => { $rootScope.$apply(); });
-            }
-            this.first = false;
-          });
+          this.push.on('registration', onRegistration(cb));
+          this.push.on('notification', onNotification);
           this.push.on('error', (e) => {
             // e members: message
             console.log(`Push Notification Error: ${e.message}`);
@@ -181,6 +151,38 @@
           });
         });
       });
+    }
+
+    /**
+     * @param data data members: message, title, count, sound, image, additionalData
+     */
+    function onNotification(data) {
+      console.log(`Push Notification Received: ${data.message}`);
+
+      // If notification type is "msg" and app is started via push notification open chat tab.
+      // "type" property is coming from hub. It is added manually into the message data
+      if (data.additionalData.coldstart && data.additionalData.type === 'msg') {
+        $state.go('correspondentDevices');
+        $timeout(() => { $rootScope.$apply(); });
+      }
+    }
+
+    function onRegistration(cb) {
+      return (data) => {
+        // data members: registrationId
+        console.log(`Push Notification RegId: ${data.registrationId}`);
+        storageService.getPushInfo((err, pushInfo) => {
+          if (!pushInfo) {
+            storageService.setPushInfo(projectNumber, data.registrationId, true, () => {
+              if (lodash.isEmpty(wsLocal) && cb) {
+                cb(null, 'ws can not be retrieved yet');
+                return;
+              }
+              sendRequestEnableNotification(wsLocal, data.registrationId, cb);
+            });
+          }
+        });
+      };
     }
 
     return root;
