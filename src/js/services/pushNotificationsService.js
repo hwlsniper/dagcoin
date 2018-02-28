@@ -104,8 +104,9 @@
           this.push.on('notification', (data) => {
             // data members: message, title, count, sound, image, additionalData
             console.log(`Push Notification Received: ${data.message}`);
+
             // If notification type is "msg" open chat tab. type property is coming from hub.
-            if (!this.first && data.additionalData['type'] === 'msg') {
+            if (!this.first && data.additionalData.type === 'msg') {
               $state.go('correspondentDevices');
               $timeout(() => { $rootScope.$apply(); });
             }
