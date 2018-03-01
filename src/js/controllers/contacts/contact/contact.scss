@@ -1,8 +1,11 @@
 @import "../../../../css/variables";
 
 .contact.contact {
-  background: #f1f1f1;
   padding: 15px;
+
+  > .mCustomScrollBox {
+    max-height: 100% !important;
+  }
 
   .contact_card {
     background: #fff;
@@ -76,6 +79,10 @@
           border-top: 1px solid #eee;
           padding: 10px 0;
           margin: 0 10px;
+
+          &.contact_action {
+            padding-top: 25px;
+          }
         }
       }
     }

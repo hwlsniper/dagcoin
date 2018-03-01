@@ -174,7 +174,8 @@
                 payload.coinAmount * 1000 * 1000,
                 payload.id,
                 payload.validForSeconds,
-                payload.merchantName
+                payload.merchantName,
+                payload.state
               );
             } catch (ex) {
               console.log(`error: ${ex}`); // Print the error if one occurred

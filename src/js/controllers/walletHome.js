@@ -74,26 +74,54 @@
           }
         });
 
-        const disableMerchantPaymentRequestListener = $rootScope.$on('merchantPaymentRequest', (event, address, amount, invoiceId, validForSeconds, merchantName) => {
+        const disableMerchantPaymentRequestListener = $rootScope.$on('merchantPaymentRequest', (event, address, amount, invoiceId, validForSeconds, merchantName, state) => {
           console.log(`paymentRequest event ${address}, ${amount}`);
           $rootScope.$emit('Local/SetTab', 'send');
           this.invoiceId = invoiceId;
           this.validForSeconds = Math.floor(validForSeconds - 10); // 10 is a security threshold
-          self.setForm(address, amount, null, ENV.DAGCOIN_ASSET, null);
 
-          const form = $scope.sendForm;
-          if (form.address.$invalid && !self.blockUx) {
-            console.log('invalid address, resetting form');
+          const processNonPendingStates = (state) => {
+            let errorMessage = '';
+
+            switch (state) {
+              case 'EXPIRED':
+                errorMessage = gettextCatalog.getString('Merchant payment request expired');
+                break;
+              case 'CANCELLED':
+                errorMessage = gettextCatalog.getString('Merchant payment request has been cancelled');
+                break;
+              case 'FAILED':
+                errorMessage = gettextCatalog.getString('Merchant payment request failed');
+                break;
+              default:
+                errorMessage = gettextCatalog.getString('An error occurred during merchant request processing');
+                break;
+            }
+
             self.resetForm();
-            self.error = gettextCatalog.getString('Could not recognize a valid Dagcoin QR Code');
-          }
+            self.error = errorMessage;
+          };
 
-          if (this.validForSeconds <= 0) {
-            self.resetForm();
-            self.error = gettextCatalog.getString('Merchant payment request expired');
-          }
+          if (state === 'PENDING') {
+            self.setForm(address, amount, null, ENV.DAGCOIN_ASSET, null);
 
-          self.countDown();
+            const form = $scope.sendForm;
+
+            if (form.address.$invalid && !self.blockUx) {
+              console.log('invalid address, resetting form');
+              self.resetForm();
+              self.error = gettextCatalog.getString('Could not recognize a valid Dagcoin QR Code');
+            }
+
+            if (this.validForSeconds <= 0) {
+              self.resetForm();
+              self.error = gettextCatalog.getString('Merchant payment request expired');
+            }
+
+            self.countDown();
+          } else {
+            processNonPendingStates(state);
+          }
         });
 
         const disablePaymentUriListener = $rootScope.$on('paymentUri', (event, uri) => {
@@ -936,7 +964,37 @@
                   paymentPromise = Promise.resolve();
                 }
 
-                paymentPromise.then(() => new Promise((resolve, reject) => {
+                let merchantPromise = null;
+
+                // Merchant Payment life cycle
+                if (self.invoiceId != null) {
+                  merchantPromise = new Promise((resolve, reject) => {
+                    const merchantApiRequest = require('request');
+
+                    merchantApiRequest(`${ENV.MERCHANT_INTEGRATION_API}/${self.invoiceId}`, (error, response, body) => {
+                      try {
+                        const payload = JSON.parse(body).payload;
+
+                        if (error) {
+                          console.log(`error: ${error}`); // Print the error if one occurred
+                          reject(error);
+                        } else {
+                          if (payload.state === 'PENDING') {
+                            resolve();
+                          }
+
+                          reject(`Payment state is ${payload.state}`);
+                        }
+                      } catch (ex) {
+                        console.log(`error: ${ex}`); // Print the error if one occurred
+                      }
+                    });
+                  });
+                } else {
+                  merchantPromise = Promise.resolve();
+                }
+
+                paymentPromise.then(() => merchantPromise).then(() => {
                   if (invoiceId != null) {
                     const objectHash = require('byteballcore/object_hash');
                     const payload = JSON.stringify({ invoiceId });
@@ -1025,11 +1083,10 @@
                           }
                         });
                       }
-                      resolve();
                     });
                   });
                   $scope.sendForm.$setPristine();
-                })).catch((error) => {
+                }).catch((error) => {
                   delete self.current_payment_key;
                   indexScope.setOngoingProcess(gettextCatalog.getString('sending'), false);
                   $rootScope.$emit('Local/ShowAlert', error, 'fi-alert', () => {
@@ -1218,6 +1275,8 @@
               // must be already paired
               assocDeviceAddressesByPaymentAddress[to] = recipientDeviceAddress;
             }
+          } else {
+            this.lockAddress = false;
           }
 
           if (moneyAmount) {

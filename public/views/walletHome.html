@@ -276,12 +276,12 @@
     <div id="send" class="send tab-view cordova-scrollable">
       <div class="introduction-svg" ng-include="'views/includes/background.html'"></div>
       <div class="p-share js-introduction">
-        <div class="p-wrap" style="width: 300px;margin: 0 auto;">
+        <div class="p-wrap" style="width: 300px; margin: 0 auto; overflow: unset;">
           <form class="page-form" name="sendForm" novalidate>
             <div class="box-notification" ng-show="home.error" ng-click="home.resetError()">
-					  <span class="text-warning">
-						{{home.error|translate}}
-					  </span>
+              <span class="text-warning">
+                {{home.error|translate}}
+              </span>
             </div>
             <div class="form-group">
               <div ng-if="home.deviceAddressIsKnown()"
@@ -330,6 +330,7 @@
                   style="font-size: 12px;"
                   type="text" id="address"
                   name="address"
+                  ng-disabled="home.blockUx || home.lockAddress"
                   ng-attr-placeholder="{{home.canSendExternalPayment() ? ('DAG address' | translate) : ('DAG address of your other wallet &#8594;' | translate)}}"
                   ng-model="_address" valid-address required
                   ng-blur="home.formFocus(false)">
@@ -359,7 +360,7 @@
 
             </div>
             <div class="page-action">
-              <button ng-disabled="sendForm.$invalid || index.onGoingProcessName == 'sending'" class="btn btn_red-full"
+              <button ng-disabled="sendForm.$invalid || index.onGoingProcessName == 'sending'" class="btn btn_red-full send-button"
                       ng-click="home.submitForm()" translate>Send <i ng-if="home.validForSeconds > 0">({{home.validForSeconds}})</i>
               </button>
               <button ng-if="home.validForSeconds > 0" class="btn btn_red-full" ng-click="home.resetForm()" translate>Cancel
