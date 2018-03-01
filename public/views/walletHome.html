@@ -1,9 +1,9 @@
-<div class="backup" ng-if="(!index.needsUnlock || index.needsUnlock.success === true) && index.needsBackup"
+<div class="backup" ng-if="index.walletInfoVisibility.visible && index.needsBackup"
      ng-click="index.openBackupNeededModal()">
   <span translate>Wallet seed not backed up</span>
 </div>
 
-<dag-nav-bar title="{{index.alias ? index.alias : index.walletName}}" ng-show="!index.needsUnlock || index.needsUnlock.success === true">
+<dag-nav-bar title="{{index.alias ? index.alias : index.walletName}}" ng-show="index.walletInfoVisibility.visible">
   <qr-scanner ng-if="tab === 'send' && index.isComplete"
               on-scan="index.onQrCodeScanned(data)"
               title="{{ 'Scan address' | translate }}">
@@ -71,7 +71,7 @@
                     <use xlink:href="img/svg/symbol-defs.svg#icon-d"></use>
                   </svg>
                   <div class="price_digits">
-                    <div class="price_digits_wrapper" ng-if="!index.needsUnlock || index.needsUnlock.success === true">
+                    <div class="price_digits_wrapper" ng-if="index.walletInfoVisibility.visible">
                       <span class="price-number"
                             ng-style="home.getFontSizeForWalletNumber(index.dagBalance.totalStr)">
                         {{index.dagBalance.totalStr.split('.')[0]}}</span><span class="price-separator">.
@@ -137,7 +137,7 @@
         </div>
 
         <div class="dag_transactions" ng-show="index.txHistory[0] && !index.updatingTxHistory"
-             ng-if="!index.needsUnlock || index.needsUnlock.success === true">
+             ng-if="index.walletInfoVisibility.visible">
           <div class="dag_transactions_list">
             <div class="dag_transactions_list_triggers">
               <h4 translate>Transactions History</h4>

@@ -2,7 +2,8 @@
 
 'use strict';
 
-angular.module('copayApp.services').factory('fingerprintService', ($log, gettextCatalog, configService, isCordova, isMobile) => {
+angular.module('copayApp.services').factory('fingerprintService', ($log, gettextCatalog, configService, isCordova,
+                                                                   isMobile, $rootScope) => {
   const root = {};
 
   let _isAvailable = false;
@@ -32,12 +33,17 @@ angular.module('copayApp.services').factory('fingerprintService', ($log, gettext
           if (result.withFingerprint) {
             $log.debug('Finger OK');
             isOpen = false;
+            $rootScope.$emit('Local/FingerprintUnlocked', 'finger');
             return cb();
           } else if (result.withPassword) {
             $log.debug('Finger: Authenticated with backup password');
             isOpen = false;
+            $rootScope.$emit('Local/FingerprintUnlocked', 'password');
             return cb();
           }
+          $log.debug('Finger: Authenticated with other method (pattern etc.)');
+          $rootScope.$emit('Local/FingerprintUnlocked', 'other');
+          return cb();
         },
         (msg) => {
           $log.debug(`Finger Failed:${JSON.stringify(msg)}`);
@@ -60,6 +66,7 @@ angular.module('copayApp.services').factory('fingerprintService', ($log, gettext
         () => {
           $log.debug('Touch ID OK');
           isOpen = false;
+          $rootScope.$emit('Local/FingerprintUnlocked', 'finger');
           return cb();
         },
         (msg) => {
