@@ -1,9 +1,9 @@
-(function () {
+(function() {
   'use strict';
 
-  angular.element(document).ready(() => {
+  angular.element(document).ready((configService) => {
     // Run copayApp after device is ready.
-    const startAngular = function () {
+    const startAngular = function() {
       angular.bootstrap(document, ['copayApp']);
     };
 
@@ -25,30 +25,6 @@
     /* Cordova specific Init */
     if (window.cordova !== undefined) {
       document.addEventListener('deviceready', () => {
-        /*
-         document.addEventListener('pause', function() {
-         if (!window.ignoreMobilePause) {
-         setTimeout(function() {
-         window.location = '#/cordova/pause/';
-         }, 100);
-         }
-         setTimeout(function() {
-         window.ignoreMobilePause = false;
-         }, 100);
-         }, false);
-
-         document.addEventListener('resume', function() {
-         if (!window.ignoreMobilePause) {
-         setTimeout(function() {
-         window.location = '#/cordova/resume/';
-         }, 100);
-         }
-         setTimeout(function() {
-         window.ignoreMobilePause = false;
-         }, 100);
-         }, false);
-         */
-
         /*
          // Back button event
          document.addEventListener('backbutton', function() {

@@ -643,7 +643,7 @@
           needProfile: false,
         });
     })
-    .run(($rootScope, $state, $stateParams, $log, uriHandler, isCordova, profileService, $timeout, nodeWebkit, uxLanguage, animationService, backButton, go) => {
+    .run(($rootScope, $state, $stateParams, $log, uriHandler, isCordova, profileService, configService, $timeout, nodeWebkit, uxLanguage, animationService, backButton, go) => {
       if ('addEventListener' in document) {
         document.addEventListener('DOMContentLoaded', () => {
           FastClick.attach(document.body);
@@ -675,6 +675,29 @@
           }
           win.menu = nativeMenuBar;
         }
+      }
+      if (isCordova) {
+        document.addEventListener('resume', () => {
+          $timeout(() => {
+            const config = configService.getSync();
+            // password and finger print options are read from config and profile service
+            const needPassword = !!profileService.profile.xPrivKeyEncrypted;
+            const needFingerprint = !!config.touchIdFor[profileService.focusedClient.credentials.walletId];
+            if (needPassword) {
+              profileService.insistUnlockFC(null, (err) => {
+                if (!err) {
+                  $rootScope.$emit('Local/ProfileBound')
+                }
+              });
+            } else if (needFingerprint) {
+              profileService.insistUnlockWithFingerprintFC((err) => {
+                if (!err) {
+                  $rootScope.$emit('Local/ProfileBound')
+                }
+              });
+            }
+          }, 100);
+        }, false);
       }
 
       $rootScope.$on('$stateChangeStart', (event, toState, toParams) => {
