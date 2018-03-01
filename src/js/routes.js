@@ -686,13 +686,13 @@
             if (needPassword) {
               profileService.insistUnlockFC(null, (err) => {
                 if (!err) {
-                  $rootScope.$emit('Local/ProfileBound')
+                  $rootScope.$emit('Local/ProfileBound');
                 }
               });
             } else if (needFingerprint) {
               profileService.insistUnlockWithFingerprintFC((err) => {
                 if (!err) {
-                  $rootScope.$emit('Local/ProfileBound')
+                  $rootScope.$emit('Local/ProfileBound');
                 }
               });
             }
