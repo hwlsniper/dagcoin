@@ -7,7 +7,7 @@
             <div class="value wrapped">{{prefGlobal.deviceName}}</div>
         </li>
 
-        <li dag-state-transition="slide-left" dag-right-icon="chevron-thin-right" ng-click="prefGlobal.changeWalletType()" ng-if="prefGlobal.canChangeWalletType">
+        <li dag-state-transition="slide-left" dag-right-icon="chevron-thin-right" ng-click="prefGlobal.changeWalletType()" ng-show="prefGlobal.canChangeWalletType">
             <div translate>Change Wallet type</div>
             <div class="value">{{prefGlobal.type}}</div>
         </li>

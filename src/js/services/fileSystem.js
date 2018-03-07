@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('copayApp.services')
-  .factory('fileSystemService', ($log, isCordova) => {
+  .factory('fileSystemService', ($log, $q, isCordova) => {
     const root = {};
     let bFsInitialized = false;
 
@@ -211,6 +211,30 @@
       }
 
       return desktopApp.getAppDataDir();
+    };
+    
+    root.checkFileSystemIsFat = function () {
+      const def = $q.defer();
+      const childProcess = require('child_process');
+      const isWin = process.platform === "win32";
+
+      if (isWin) {
+        const systemDrive = process.env.SystemDrive;
+
+        childProcess.exec(`fsutil fsinfo volumeinfo ${systemDrive}`, (err, stdout) => {
+          if (err) {
+            def.resolve(false);
+          }
+
+          const isFat = stdout.toLowerCase().indexOf('fat') !== -1;
+
+          def.resolve(isFat);
+        });
+      } else {
+        def.resolve(false);
+      }
+
+      return def.promise;
     };
 
     return root;

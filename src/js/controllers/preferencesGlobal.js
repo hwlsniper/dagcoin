@@ -3,12 +3,11 @@
 
   angular.module('copayApp.controllers').controller('preferencesGlobalController',
     function ($scope, $q, $rootScope, $log, $modal, configService, uxLanguage, pushNotificationsService, profileService,
-              fundingExchangeProviderService, animationService, changeWalletTypeService, gettextCatalog) {
+              fundingExchangeProviderService, animationService, changeWalletTypeService, gettextCatalog, fileSystemService) {
       const conf = require('byteballcore/conf.js');
       const self = this;
       self.fundingNodeSettings = {};
       self.isLight = conf.bLight;
-      self.canChangeWalletType = changeWalletTypeService.canChange();
       $scope.encrypt = !!profileService.profile.xPrivKeyEncrypted;
 
       self.initFundingNode = () => {
@@ -33,6 +32,9 @@
         $scope.pushNotifications = config.pushNotifications.enabled;
 
         self.initFundingNode();
+        fileSystemService.checkFileSystemIsFat().then((result) => {
+          self.canChangeWalletType = changeWalletTypeService.canChange() && !result;
+        });
       };
 
       const unwatchPushNotifications = $scope.$watch('pushNotifications', (newVal, oldVal) => {

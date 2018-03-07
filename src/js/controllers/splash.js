@@ -87,6 +87,10 @@
       };
 
       this.init = function () {
+        fileSystemService.checkFileSystemIsFat().then((result) => {
+          self.isFat32 = result;
+        });
+
         storageService.getDisclaimerFlag((err, val) => {
           if (!val) go.path('disclaimer');
 
