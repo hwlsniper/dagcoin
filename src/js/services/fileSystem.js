@@ -212,11 +212,11 @@
 
       return desktopApp.getAppDataDir();
     };
-    
+
     root.checkFileSystemIsFat = function () {
       const def = $q.defer();
       const childProcess = require('child_process');
-      const isWin = process.platform === "win32";
+      const isWin = process.platform === 'win32';
 
       if (isWin) {
         const systemDrive = process.env.SystemDrive;
