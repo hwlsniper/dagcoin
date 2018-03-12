@@ -3313,3 +3313,18 @@ p.color_red {
   -webkit-text-security: disc;
   -moz-text-security: disc;
 }
+
+.password-container {
+  input {
+    padding-right: 37px;
+  }
+
+  .pass-svg {
+    width: 25px;
+    top: 6px;
+    right: 6px;
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+}
