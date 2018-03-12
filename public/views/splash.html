@@ -15,7 +15,7 @@
      ng-controller="splashController as splash">
   <div class="introduction-svg" ng-include="'views/includes/background.html'"></div>
   <div ng-if="!index.hasProfile">
-    <div ng-if="splash.step === 'registration_type'">
+    <div class="step" ng-if="splash.step === 'registration_type'">
       <div class="row text-left" style="margin-top: 40px">
         <div class="start-button large-10 medium-10 small-10 medium-centered small-centered large-centered columns">
 
@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-    <div ng-if="splash.step === 'wallet_type'">
+    <div class="step" ng-if="splash.step === 'wallet_type'">
       <div class="row text-left" style="margin-top: 40px">
         <div class="start-button large-10 medium-10 small-10 medium-centered small-centered large-centered columns">
 
@@ -123,7 +123,7 @@
         </div>
       </div>
     </div>
-    <div ng-if="splash.step === 'device_name'">
+    <div class="step" ng-if="splash.step === 'device_name'" ng-scrollbars>
       <div class="row">
         <div class="medium-centered small-centered large-centered columns">
           <div class="m20t">
@@ -158,7 +158,7 @@
           <div ng-show="!splash.bDeviceNameSet">
             <label><span class="text-gray" translate>Please name this device</span></label>
             <div class="input-wrap m20t">
-              <input type="text" id="deviceName" type="text" name="deviceName" ng-model="splash.deviceName" class="text-gray text-center">
+              <input type="text" id="deviceName" type="text" ng-scrollbars-focus name="deviceName" ng-model="splash.deviceName" class="text-gray text-center">
             </div>
 
             <button ng-click="splash.saveDeviceName()" class="btn btn_red-full m20t" ng-disabled="!splash.deviceName" translate>

@@ -1612,6 +1612,13 @@ input.ng-invalid-match, input.ng-invalid-match:focus {
 .splash {
   top: 0;
 
+  .step {
+    min-height: 100vh;
+    .mCSB_scrollTools {
+      display: none !important;
+    }
+  }
+
   .container-image {
     padding: 2rem 0;
   }

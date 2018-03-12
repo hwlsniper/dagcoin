@@ -25,6 +25,7 @@
         font-size: 16px;
         color: #333;
         font-weight: 700;
+        word-wrap: break-word;
       }
 
       .contact_meta_triggers {
@@ -71,7 +72,7 @@
       .contact_info_value {
         color: #575f69;
         font-size: 14px;
-        white-space: pre;
+        word-wrap: break-word;
       }
 
       > ul {

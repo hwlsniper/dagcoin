@@ -1,6 +1,6 @@
 <dag-nav-bar title="{{ 'Device name' | translate }}" invert go-back="system"></dag-nav-bar>
 
-<div class="content preferences" ng-controller="preferencesDeviceNameController as prefDeviceName">
+<div class="content preferences" ng-scrollbars>
     <div class="p-share js-introduction">
         <div class="p-wrap">
             <form name="settingsDeviceNameForm" ng-submit="prefDeviceName.save()" class="page-form">
@@ -10,7 +10,7 @@
                         <span class="name" translate>Device name</span>
                     </div>
                     <div class="input-wrap">
-                        <input id="deviceName" type="text" name="deviceName" ng-model="prefDeviceName.deviceName">
+                        <input id="deviceName" ng-scrollbars-focus type="text" name="deviceName" ng-model="prefDeviceName.deviceName">
                     </div>
                 </div>
 
@@ -25,5 +25,3 @@
     </div>
 
 </div>
-
-<div class="extra-margin-bottom"></div>

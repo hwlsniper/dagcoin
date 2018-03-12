@@ -16,6 +16,7 @@
       // Statuses
       self.active = false;
       self.activating = false;
+      self.paused = false;
 
       self.dagcoinOrigin = null;
 
@@ -390,6 +391,10 @@
       };
 
       $rootScope.$on('Local/NewFocusedWallet', () => {
+        if (self.paused) {
+          return;
+        }
+
         const walletId = profileService.focusedClient.credentials.walletId;
 
         self.dbManager = require('dagcoin-core/lib/databaseManager').getInstance();
@@ -462,6 +467,14 @@
 
       self.setIndex = (index) => {
         self.index = index;
+      };
+
+      self.pause = function () {
+        self.paused = true;
+      };
+
+      self.unpause = function () {
+        self.paused = false;
       };
 
       return self;

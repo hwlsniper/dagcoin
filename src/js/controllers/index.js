@@ -60,6 +60,10 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         // self.usePushNotifications = isCordova && !isMobile.Windows() && isMobile.Android();
         self.usePushNotifications = false;
 
+        // This property is assigned to an empty object to escape from null pointer access.
+        // This is initialized in Local/ProfileBound event
+        self.walletInfoVisibility = {};
+
         constants.DAG_FEE = 500; // TODO: this is the transaction fee in micro dagcoins 1000 = 0.001 dagcoins
         constants.MIN_BYTE_FEE = 950;
 
@@ -1499,6 +1503,12 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         });
 
         $rootScope.$on('Local/ProfileBound', () => {
+          const config = configService.getSync();
+
+          // password and finger print options are read from config and profile service
+          const needPassword = !!profileService.profile.xPrivKeyEncrypted;
+          const needFingerprint = !!config.touchIdFor[profileService.focusedClient.credentials.walletId];
+          self.walletInfoVisibility = new WalletInfoVisibility(needPassword, needFingerprint);
         });
 
         $rootScope.$on('Local/NewFocusedWallet', () => {
@@ -1656,10 +1666,6 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         $rootScope.$on('Local/NeedsPassword', (event, isSetup, errorMessage, cb) => {
           console.log('NeedsPassword');
 
-          // needsUnlock used for controlling initial display of wallet information in case of enabled password protection
-          if (!self.needsUnlock) {
-            self.needsUnlock = {};
-          }
           self.askPassword = {
             isSetup,
             error: errorMessage,
@@ -1696,8 +1702,13 @@ no-nested-ternary,no-shadow,no-plusplus,consistent-return,import/no-extraneous-d
         });
 
         $rootScope.$on('Local/BalanceUpdatedAndWalletUnlocked', () => {
-          // needsUnlock used for controlling initial display of wallet information in case of enabled password protection
-          self.needsUnlock = { success: true };
+          self.walletInfoVisibility.setPasswordSuccess(true);
+          $timeout(() => { $rootScope.$apply(); });
+        });
+
+        $rootScope.$on('Local/FingerprintUnlocked', () => {
+          self.walletInfoVisibility.setFingerprintSuccess(true);
+          $timeout(() => { $rootScope.$apply(); });
         });
 
         if (autoRefreshClientService) {
