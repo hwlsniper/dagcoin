@@ -1,9 +1,9 @@
-(function() {
+(function () {
   'use strict';
 
-  angular.element(document).ready((configService) => {
+  angular.element(document).ready(() => {
     // Run copayApp after device is ready.
-    const startAngular = function() {
+    const startAngular = function () {
       angular.bootstrap(document, ['copayApp']);
     };
 
