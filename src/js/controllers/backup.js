@@ -22,9 +22,9 @@
                      Just the wallet seed is not enough.`);
       }
 
-
-      if (fc.isPrivKeyEncrypted()) self.credentialsEncrypted = true;
-      else {
+      if (profileService.profile.xPrivKeyEncrypted) {
+        self.credentialsEncrypted = true;
+      } else {
         setWords(fc.getMnemonic());
       }
       if (fc.credentials && !fc.credentials.mnemonicEncrypted && !fc.credentials.mnemonic) {
@@ -73,30 +73,34 @@
         }
       }
 
+      self.unlock = function () {
+        profileService.unlockFC(null, (err) => {
+          if (err) {
+            self.error = `${gettextCatalog.getString('Could not decrypt')}: ${err.message}`;
+            $log.warn('Error decrypting credentials:', self.error); // TODO
+            return;
+          }
+          if (!self.show && self.credentialsEncrypted) {
+            self.show = !self.show;
+          }
+          self.credentialsEncrypted = false;
+          setWords(fc.getMnemonic());
+          $rootScope.$emit('Local/BackupDone');
+        });
+      };
+
       self.passwordRequest = function () {
         try {
-          setWords(fc.getMnemonic());
+          self.unlock();
         } catch (e) {
-          if (e.message && e.message.match(/encrypted/) && fc.isPrivKeyEncrypted()) {
+          if (e.message && e.message.match(/encrypted/) && !!profileService.profile.xPrivKeyEncrypted) {
             self.credentialsEncrypted = true;
 
             $timeout(() => {
               $scope.$apply();
             }, 1);
 
-            profileService.unlockFC(null, (err) => {
-              if (err) {
-                self.error = `${gettextCatalog.getString('Could not decrypt')}: ${err.message}`;
-                $log.warn('Error decrypting credentials:', self.error); // TODO
-                return;
-              }
-              if (!self.show && self.credentialsEncrypted) {
-                self.show = !self.show;
-              }
-              self.credentialsEncrypted = false;
-              setWords(fc.getMnemonic());
-              $rootScope.$emit('Local/BackupDone');
-            });
+            self.unlock();
           }
         }
       };
