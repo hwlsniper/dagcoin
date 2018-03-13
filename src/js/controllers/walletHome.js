@@ -103,7 +103,7 @@
           };
 
           if (state === 'PENDING') {
-            self.setForm(address, amount, null, ENV.DAGCOIN_ASSET, null);
+            self.setForm(address, amount, null, ENV.DAGCOIN_ASSET, null, true);
 
             const form = $scope.sendForm;
 
@@ -685,9 +685,6 @@
               },
               set(newValue) {
                 $scope.__address = self.onAddressChange(newValue);
-                if ($scope.sendForm && $scope.sendForm.address.$valid) {
-                  self.lockAddress = true;
-                }
               },
               enumerable: true,
               configurable: true,
@@ -1254,10 +1251,9 @@
           form.address.$setViewValue(to);
           form.address.$isValid = true;
           form.address.$render();
-          this.lockAddress = true;
         };
 
-        this.setForm = function (to, amount, comment, asset, recipientDeviceAddress) {
+        this.setForm = function (to, amount, comment, asset, recipientDeviceAddress, isMerchant) {
           this.resetError();
           delete this.binding;
           const form = $scope.sendForm;
@@ -1270,14 +1266,13 @@
             form.address.$setViewValue(to);
             form.address.$isValid = true;
             form.address.$render();
-            this.lockAddress = true;
             if (recipientDeviceAddress) {
               // must be already paired
               assocDeviceAddressesByPaymentAddress[to] = recipientDeviceAddress;
             }
-          } else {
-            this.lockAddress = false;
           }
+
+          this.lockAddress = to && isMerchant;
 
           if (moneyAmount) {
             if (asset === 'base') {

@@ -263,5 +263,38 @@
         ctrl.$parsers.push(normalizeAmount);
       }
     };
+  }])
+  .directive('ngScrollbarsFocus', ['$interval', function ($interval) {
+    return {
+      restrict: 'A',
+      link: (scope, element) => {
+        const e = window.$(element);
+        const height = window.innerHeight;
+
+        let scrollInterval = null;
+
+        // Focus In
+        e.bind('focus', () => {
+          const scrollbar = e.closest('.mCustomScrollbar');
+
+          if (!scrollbar.length) {
+            return;
+          }
+
+          scrollInterval = $interval(() => {
+            if (height !== window.innerHeight && scrollbar.find('.mCSB_scrollTools').length) {
+              scrollbar.mCustomScrollbar('scrollTo', e);
+              $interval.cancel(scrollInterval);
+            }
+          }, 300);
+        });
+        // Focus Out
+        e.bind('blur', () => {
+          if (scrollInterval) {
+            $interval.cancel(scrollInterval);
+          }
+        });
+      }
+    };
   }]);
 }());

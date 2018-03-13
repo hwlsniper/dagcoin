@@ -63,18 +63,28 @@
           profileService.setPrivateKeyEncryptionFC(password, () => {
             $rootScope.$emit('Local/NewEncryptionSetting');
             $scope.encrypt = true;
+
+            if ($scope.touchid) {
+              $scope.touchid = false;
+            }
           });
         });
       }
 
       function unlock(error) {
+        const def = $q.defer();
+
         profileService.unlockFC(error, (err) => {
           if (err) {
             $scope.encrypt = true;
 
             if (err.message !== gettextCatalog.getString('Password needed')) {
-              return unlock(err.message);
+              return unlock(err.message).then((locked) => {
+                def.resolve(locked);
+              });
             }
+
+            def.resolve(true);
             return;
           }
           profileService.disablePrivateKeyEncryptionFC((disablePrivateKeyEncryptionFCError) => {
@@ -85,8 +95,11 @@
               return;
             }
             $scope.encrypt = false;
+            def.resolve(false);
           });
         });
+
+        return def.promise;
       }
 
       const unwatchEncrypt = $scope.$watch('encrypt', (val) => {
@@ -97,7 +110,6 @@
         }
 
         if (val && !fc.hasPrivKeyEncrypted()) {
-          $scope.touchid = false;
           lock();
         } else if (!val && fc.hasPrivKeyEncrypted()) {
           unlock();
@@ -124,12 +136,21 @@
               $scope.touchid = oldVal;
             }, 100);
           }
-          $scope.encrypt = false;
+
           configService.set(opts, (configServiceError) => {
             if (configServiceError) {
               $log.debug(configServiceError);
               $scope.touchidError = true;
               $scope.touchid = oldVal;
+            }
+
+            if ($scope.encrypt && !oldVal) {
+              $scope.touchid = false;
+              unlock().then((locked) => {
+                if (!locked) {
+                  $scope.touchid = true;
+                }
+              });
             }
           });
         });

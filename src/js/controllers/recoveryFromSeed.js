@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('copayApp.controllers').controller('recoveryFromSeed',
-    function ($rootScope, $scope, $state, $log, $timeout, profileService, gettextCatalog, fileSystemService, configService) {
+    function ($rootScope, $scope, $state, $log, $timeout, profileService, gettextCatalog, fileSystemService, configService, fundingExchangeClientService) {
       const async = require('async');
       const conf = require('byteballcore/conf.js');
       const walletDefinedByKeys = require('byteballcore/wallet_defined_by_keys.js');
@@ -255,6 +255,7 @@
         const device = require('byteballcore/device');
         const arrWalletIndexes = Object.keys(assocMaxAddressIndexes);
         if (arrWalletIndexes.length) {
+          fundingExchangeClientService.pause();
           removeAddressesAndWallets(() => {
             const myDeviceAddress = objectHash.getDeviceAddress(ecdsa.publicKeyCreate(self.xPrivKey.derive("m/1'").privateKey.bn.toBuffer({ size: 32 }), true).toString('base64'));
             profileService.replaceProfile(self.xPrivKey.toString(), self.inputMnemonic, myDeviceAddress, () => {

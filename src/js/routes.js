@@ -321,6 +321,7 @@
           views: {
             main: {
               templateUrl: 'views/preferencesDeviceName.html',
+              controller: 'preferencesDeviceNameController as prefDeviceName'
             },
           },
         })

@@ -36,7 +36,7 @@
         $scope.error = null;
 
         correspondentListService.getCorrespondentsOrderedByMessageDate().then((correspondents) => {
-          correspondentListService.getPendingSharedAddresses().then((pendingAddresses) => {
+          correspondentListService.getPendingSharedAddresses().then(() => {
             wallet.readDeviceAddressesUsedInSigningPaths((arrNotRemovableDeviceAddresses) => {
               // adding manually discovery service, because it doesn't exists in signing paths
               arrNotRemovableDeviceAddresses.push(ENV.discoveryDeviceAddress);
@@ -44,10 +44,9 @@
               for (let i = 0, { length } = correspondents; i < length; i += 1) {
                 const corrDev = correspondents[i];
                 const ixNotRemovable = arrNotRemovableDeviceAddresses.indexOf(corrDev.device_address);
-                const ixPendingAddress = pendingAddresses.indexOf(corrDev.device_address);
                 // device is removable when not in list
                 corrDev.removable = (ixNotRemovable === -1);
-                corrDev.clickable = (corrDev.removable || ixPendingAddress !== -1);
+                corrDev.clickable = (corrDev.device_address !== ENV.discoveryDeviceAddress && corrDev.name.toLowerCase().indexOf('funding-node') === -1);
               }
 
               $scope.list = correspondents;
